@@ -1,5 +1,8 @@
 package com.cine.monteiro.services;
 
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,20 +15,33 @@ public class AdministradorService {
 	@Autowired
 	private AdministradorRepository administradorRepository;
 	
-	public void save(Administrador administrador) {
+	
+	public Administrador save(Administrador administrador) {
+		administradorRepository.save(administrador);
+		return administrador;
+	}
+	
+	public Administrador deletar(Long id) {
+		Administrador administradorDeletado = administradorRepository.findById(id).get();
+		administradorRepository.deleteById(id);
+		return administradorDeletado;
 		
 	}
 	
-	public void deletar(String CPF) {
+	public Administrador update(Administrador administrador) {
+		Administrador administradorDesatualizado = administradorRepository.findById(administrador.getId()).get();
+		BeanUtils.copyProperties(administrador, administradorDesatualizado, "id");
+		administradorRepository.save(administrador);
+		return administrador;
 		
 	}
 	
-	public void update(Administrador administrador) {
-		
+	public Administrador pesquisar(Long id) {
+		Administrador administrador = administradorRepository.findById(id).get();
+		return administrador;
 	}
 	
-	public void pesquisar(String CPF) {
-		
+	public List<Administrador> listar() {
+		return administradorRepository.findAll();
 	}
-
 }

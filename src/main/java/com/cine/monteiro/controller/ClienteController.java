@@ -19,7 +19,7 @@ public class ClienteController {
 	@PostMapping("/cadastrar")
 	public ResponseEntity<Cliente> cadastrar(@RequestBody Cliente cliente) {
 		Cliente clienteCadastrado = clienteService.save(cliente);
-		return cliente == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(clienteCadastrado);
+		return clienteCadastrado == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(clienteCadastrado);
 	}
 	
 	@DeleteMapping("/deletar/{id}")
