@@ -1,11 +1,9 @@
 package com.cine.monteiro.controller;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.cine.monteiro.model.users.Cliente;
 import com.cine.monteiro.services.ClienteService;
 
@@ -44,6 +42,13 @@ public class ClienteController {
 	public ResponseEntity<Cliente> pesquisar(@PathVariable Long id) {
 		Cliente clientePesquisado = clienteService.pesquisar(id);
 		return clientePesquisado == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(clientePesquisado);
+	}
+	
+	@GetMapping("/validarSenha")
+	public ResponseEntity<Boolean> validarSenha(@RequestParam String email, @RequestParam String password){
+		boolean validar = clienteService.validarSenha(email, password);
+		HttpStatus status = (validar) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+		return ResponseEntity.status(status).body(validar);
 	}
 
 }

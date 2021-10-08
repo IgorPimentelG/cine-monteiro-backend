@@ -1,11 +1,9 @@
 package com.cine.monteiro.controller;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.cine.monteiro.model.users.Administrador;
 import com.cine.monteiro.services.AdministradorService;
 
@@ -45,5 +43,11 @@ public class AdministradorController {
 		Administrador administradorPesquisado = administradorService.pesquisar(id);
 		return administradorPesquisado == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(administradorPesquisado);
 	}
-
+	
+	@GetMapping("/validarSenha")
+	public ResponseEntity<Boolean> validarSenha(@RequestParam String email, @RequestParam String password){
+		boolean validar = administradorService.validarSenha(email, password);
+		HttpStatus status = (validar) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+		return ResponseEntity.status(status).body(validar);
+	}
 }

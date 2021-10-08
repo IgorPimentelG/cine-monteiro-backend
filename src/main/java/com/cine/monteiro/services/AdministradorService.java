@@ -1,11 +1,10 @@
 package com.cine.monteiro.services;
-
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.cine.monteiro.model.users.Administrador;
 import com.cine.monteiro.repository.AdministradorRepository;
 
@@ -15,8 +14,11 @@ public class AdministradorService {
 	@Autowired
 	private AdministradorRepository administradorRepository;
 	
+	@Autowired
+	private PasswordEncoder encoder;
 	
 	public Administrador save(Administrador administrador) {
+		administrador.setPassword(encoder.encode(administrador.getPassword()));
 		administradorRepository.save(administrador);
 		return administrador;
 	}
@@ -43,5 +45,15 @@ public class AdministradorService {
 	
 	public List<Administrador> listar() {
 		return administradorRepository.findAll();
+	}
+	
+	public Boolean validarSenha(String email, String password){
+		Optional<Administrador> optAdm = administradorRepository.findByEmail(email);
+		if(optAdm.isEmpty()) {
+			return false;
+		}
+		boolean valide = encoder.matches(password, optAdm.get().getPassword());
+		boolean result = (valide) ? true : false; 
+		return result;
 	}
 }
