@@ -24,4 +24,18 @@ public class Sala {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "sala_fk")
 	private List<Sessao> sessoes = new ArrayList<Sessao>();
 	
+	// Construtores
+	public Sala() { }
+	
+	public Sala(String nome, Integer quantidadeAssentos) {
+		this.nome = nome;
+		this.quantidadeAssentos = quantidadeAssentos;
+	}
+	
+	// Métodos
+	public void adicionarSessao(Sessao sessao) {
+		this.sessoes.add(sessao);
+	}
+	
+	
 }

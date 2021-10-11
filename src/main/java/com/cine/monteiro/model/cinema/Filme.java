@@ -21,12 +21,13 @@ public class Filme {
 	
 	private String sinopse;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Genero genero;
 	
 	private Long duracao;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name = "classificacao_etaria")
 	private ClassificacaoEtaria classificacaoEtaria;
 	
 	@Enumerated(EnumType.STRING)

@@ -23,12 +23,16 @@ public class FilmeRelatorio {
 	@Setter(value = AccessLevel.NONE)
 	private Filme filme;
 	
+	@Column(name = "lucro_total")
 	private BigDecimal lucroTotal;
 	
+	@Column(name = "quantidade_ingressos_vendidos")
 	private Integer quantidadeIngressosVendidos;
 	
+	@Column(name = "total_exibicoes")
 	private Integer totalExibicoes;
 	
+	@Column(name = "total_sessoes")
 	private Integer totalDeSessoes;
 
 	// Construtores
