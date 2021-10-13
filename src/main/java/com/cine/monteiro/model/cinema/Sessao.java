@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 import lombok.Data;
@@ -52,7 +53,7 @@ public class Sessao {
 	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "TB_ASSENTOS_RESERVADOS_SESSAO")
-	@Column(name = "assentos_reservados")
-	private List<String> assentosReservados = new ArrayList<String>();
+	@Column(name = "assentos_reservados_sessao")
+	private Set<String> assentosReservados;
 	
 }

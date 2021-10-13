@@ -44,7 +44,7 @@ public class AdministradorController {
 		return administradorPesquisado == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(administradorPesquisado);
 	}
 	
-	@GetMapping("/validarSenha")
+	@GetMapping("/autenticar")
 	public ResponseEntity<Boolean> validarSenha(@RequestParam String email, @RequestParam String password){
 		boolean validar = administradorService.validarSenha(email, password);
 		HttpStatus status = (validar) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;

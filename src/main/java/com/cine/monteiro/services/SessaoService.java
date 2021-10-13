@@ -10,5 +10,6 @@ public class SessaoService {
 	
 	@Autowired
 	private SessaoRepository sessaoRepository;
+
 	
 }

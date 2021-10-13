@@ -1,11 +1,9 @@
 package com.cine.monteiro.model.relatorio;
 
-import java.math.BigDecimal;
+
 import javax.persistence.*;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 
 // Pacotes
 import com.cine.monteiro.model.cinema.Filme;
@@ -13,21 +11,12 @@ import com.cine.monteiro.model.cinema.Filme;
 @Data
 @Entity
 @Table(name = "TB_FILME_RELATORIO")
-public class FilmeRelatorio {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+@EqualsAndHashCode(callSuper = false)
+public class FilmeRelatorio extends Relatorio {
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@Setter(value = AccessLevel.NONE)
 	private Filme filme;
-	
-	@Column(name = "lucro_total")
-	private BigDecimal lucroTotal;
-	
-	@Column(name = "quantidade_ingressos_vendidos")
-	private Integer quantidadeIngressosVendidos;
 	
 	@Column(name = "total_exibicoes")
 	private Integer totalExibicoes;
@@ -36,20 +25,17 @@ public class FilmeRelatorio {
 	private Integer totalDeSessoes;
 
 	// Construtores
-	public FilmeRelatorio() {}
-	
 	public FilmeRelatorio(Filme filme) {
+		super();
 		this.filme = filme;
-		this.lucroTotal = new BigDecimal(0);
-		this.quantidadeIngressosVendidos = 0;
 		this.totalExibicoes = 0;
 		this.totalDeSessoes = 0;
 	}
 	
 	public String toString() {
-		return "\nID: " + this.id + 
-				"\nLucro Total: " + this.lucroTotal + 
-				"\nQuantidade Ingressos Vendidos: " + this.quantidadeIngressosVendidos +
+		return "\nID: " + super.id + 
+				"\nLucro Total: " + super.lucroTotal + 
+				"\nQuantidade Ingressos Vendidos: " + super.quantidadeIngressosVendidos +
 				"\nTotal de Exibições: " + this.totalExibicoes + 
 				"\nTotal de Sessões: " + this.totalDeSessoes;
 	}
