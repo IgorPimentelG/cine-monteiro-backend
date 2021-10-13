@@ -15,8 +15,9 @@ public class GeneroService {
 	@Autowired
 	private GeneroRepository generoRepository;
 	
-	public void salvar(Genero genero) {
+	public Genero salvar(Genero genero) {
 		generoRepository.save(genero);
+		return genero;
 	}
 	
 	public void deletar(Long id) {

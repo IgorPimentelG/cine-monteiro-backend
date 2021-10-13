@@ -15,9 +15,9 @@ public class ClienteController {
 	private ClienteService clienteService;
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Cliente> cadastrar(@RequestBody Cliente cliente) {
+	public Cliente cadastrar(@RequestBody Cliente cliente) {
 		Cliente clienteCadastrado = clienteService.save(cliente);
-		return clienteCadastrado == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(clienteCadastrado);
+		return clienteCadastrado;
 	}
 	
 	@DeleteMapping("/deletar/{id}")
@@ -44,8 +44,8 @@ public class ClienteController {
 		return clientePesquisado == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(clientePesquisado);
 	}
 	
-	@GetMapping("/validarSenha")
-	public ResponseEntity<Boolean> validarSenha(@RequestParam String email, @RequestParam String password){
+	@GetMapping("/autenticar")
+	public ResponseEntity<Boolean> autenticar(@RequestParam String email, @RequestParam String password){
 		boolean validar = clienteService.validarSenha(email, password);
 		HttpStatus status = (validar) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
 		return ResponseEntity.status(status).body(validar);

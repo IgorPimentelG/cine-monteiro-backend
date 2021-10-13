@@ -40,6 +40,10 @@ public class FilmeRelatorio {
 	
 	public FilmeRelatorio(Filme filme) {
 		this.filme = filme;
+		this.lucroTotal = new BigDecimal(0);
+		this.quantidadeIngressosVendidos = 0;
+		this.totalExibicoes = 0;
+		this.totalDeSessoes = 0;
 	}
 	
 	public String toString() {
