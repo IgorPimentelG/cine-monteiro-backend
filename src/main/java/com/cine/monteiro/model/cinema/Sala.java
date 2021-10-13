@@ -21,7 +21,7 @@ public class Sala {
 	@Column(name = "quantidade_assentos")
 	private Integer quantidadeAssentos;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "sala_fk")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "sala")
 	private List<Sessao> sessoes = new ArrayList<Sessao>();
 	
 	// Construtores

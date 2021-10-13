@@ -29,16 +29,16 @@ public class Sessao {
 	@Column(name = "preco_ingresso")
 	private BigDecimal precoIngresso;
 	
-	@Column(name = "hora_inicio_exibicao")
+	@Column(name = "hora_inicio_exibicao", columnDefinition = "TIME")
 	private LocalTime horaDeInicioExibicao;
 	
-	@Column(name = "hora_termino_exibicao")
+	@Column(name = "hora_termino_exibicao", columnDefinition = "TIME")
 	private LocalTime horaDeTerminoExibicao;
 	
-	@Column(name = "inicio_periodo_exibicao")
+	@Column(name = "inicio_periodo_exibicao", columnDefinition = "DATE")
 	private LocalDate inicioPeriodoExibicao;
 	
-	@Column(name = "termino_periodo_exibicao")
+	@Column(name = "termino_periodo_exibicao", columnDefinition = "DATE")
 	private LocalDate terminoPeriodoExibicao;
 	
 	@Column(name = "quantidade_vagas_disponiveis")
@@ -53,23 +53,6 @@ public class Sessao {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "TB_ASSENTOS_RESERVADOS_SESSAO")
 	@Column(name = "assentos_reservados")
-	private List<String> assentosReservados;
+	private List<String> assentosReservados = new ArrayList<String>();
 	
-	public Sessao() {
-		
-		// Verificar se sessão está ativa
-		if(this.inicioPeriodoExibicao.isEqual(LocalDate.now())) {
-			this.isAtiva = true;
-		} else {
-			this.isAtiva = false;
-		}
-		
-		this.isInterrompida = false;
-		this.isInterrompidaPorUmDia = false;
-		
-		this.quantidadeVagasDisponiveis = sala.getQuantidadeAssentos();
-		
-		this.assentosReservados = new ArrayList<String>();
-	}
-
 }
