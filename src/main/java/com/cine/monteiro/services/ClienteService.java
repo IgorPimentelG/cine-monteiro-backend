@@ -1,12 +1,16 @@
 package com.cine.monteiro.services;
 import java.util.List;
-import java.util.Optional;
+
+import javax.validation.ValidationException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.cine.monteiro.exception.UserException;
 import com.cine.monteiro.model.users.Cliente;
 import com.cine.monteiro.repository.ClienteRepository;
+import com.cine.monteiro.utils.UserUtils;
 
 @Service
 public class ClienteService {
@@ -15,45 +19,66 @@ public class ClienteService {
 	private ClienteRepository clienteRepository;
 	
 	@Autowired
-	private PasswordEncoder encoder;
+	private UserUtils userUtils;
 	
-	public Cliente save(Cliente cliente) {
-		cliente.setPassword(encoder.encode(cliente.getPassword()));
-		clienteRepository.save(cliente);
-		return cliente;
-	}
-	
-	public Cliente deletar(Long id) {
-		Cliente clienteDeletado = clienteRepository.findById(id).get();
-		clienteRepository.deleteById(id);
-		return clienteDeletado;
+	public Cliente salvar(Cliente cliente) throws UserException, ValidationException {
 		
-	}
-	
-	public Cliente update(Cliente cliente) {
-		Cliente clienteDesatualizado = clienteRepository.findById(cliente.getId()).get();
-		BeanUtils.copyProperties(cliente, clienteDesatualizado, "id");
-		clienteRepository.save(cliente);
-		return cliente;
+		// Validações
+		userUtils.validarEmail(cliente.getEmail());
+		userUtils.validarPassword(cliente.getPassword());
 		
-	}
-	
-	public Cliente pesquisar(Long id) {
-		Cliente cliente = clienteRepository.findById(id).get();
-		return cliente;
-	}
-	
-	public List<Cliente> listar() {
-		return clienteRepository.findAll();
-	}
-	
-	public Boolean validarSenha(String email, String password){
-		Optional<Cliente> optClie = clienteRepository.findByEmail(email);
-		if(optClie.isEmpty()) {
-			return false;
+		if(clienteRepository.findByEmail(cliente.getEmail()) != null) {
+			throw new UserException("USUÁRIO JÁ CADASTRADO!");
 		}
-		boolean valide = encoder.matches(password, optClie.get().getPassword());
-		boolean result = (valide) ? true : false; 
-		return result;
+		
+		cliente.setPassword(userUtils.encodePassword(cliente.getPassword()));				// Encriptar Senha
+		
+		return clienteRepository.save(cliente);
 	}
+	
+	public Cliente deletar(Long id) throws UserException {
+		Cliente cliente = clienteRepository.findById(id).get();
+		
+		validarRetorno(cliente);
+
+		clienteRepository.deleteById(id);
+		return cliente;
+	}
+	
+	public Cliente update(Cliente cliente) throws UserException {
+		Cliente clienteDesatualizado = clienteRepository.findById(cliente.getId()).get();
+		
+		validarRetorno(clienteDesatualizado);
+		
+		BeanUtils.copyProperties(cliente, clienteDesatualizado, "id");
+		return clienteRepository.save(cliente);
+	}
+	
+	public Cliente pesquisar(Long id) throws UserException {
+		Cliente cliente = clienteRepository.findById(id).get();
+		
+		validarRetorno(cliente);
+		
+		return cliente;
+	}
+	
+	public List<Cliente> listar() throws UserException {
+		
+		List<Cliente> clientes = clienteRepository.findAll();
+		
+		if(clientes.isEmpty()) {
+			throw new UserException("NÃO EXISTE USUÁRIOS CADASTRADOS!");
+		}
+		
+		return clientes;
+	}
+	
+	public Cliente autenticar(String email, String password) throws UserException {
+		return userUtils.autenticarCliente(email, password);
+	}
+	
+	private void validarRetorno(Cliente cliente) throws UserException {
+		throw new UserException("USUÁRIO NÃO ENCONTRADO!");
+	}
+	
 }

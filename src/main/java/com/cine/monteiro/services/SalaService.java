@@ -2,11 +2,12 @@ package com.cine.monteiro.services;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cine.monteiro.exception.SalaException;
 import com.cine.monteiro.model.cinema.Sala;
+import com.cine.monteiro.model.cinema.Sessao;
 import com.cine.monteiro.repository.SalaRepository;
 
 @Service
@@ -16,27 +17,44 @@ public class SalaService {
 	private SalaRepository salaRepository;
 	
 	public Sala salvar(Sala sala) {
-		salaRepository.save(sala);
+		return salaRepository.save(sala);
+	}
+	
+	public Sala deletar(Long id) throws SalaException {
+		
+		Sala sala = pesquisar(id);
+		
+		validarRetorno(sala);
+		
+		for(Sessao sessao : sala.getSessoes()) {
+			if(sessao.isAtiva()) {
+				throw new SalaException("A SALA CONTÊM SESSÕES ATIVAS!");
+			}
+		}
+		salaRepository.delete(sala);
+		return sala;
+	
+	}
+	
+	public List<Sala> listar() throws SalaException {
+		List<Sala> salas = salaRepository.findAll();
+		
+		if(salas.isEmpty()) {
+			throw new SalaException("NÃO EXISTE SALAS CADASTRADAS!");
+		}
+		
+		return salas;
+	}
+	
+	public Sala pesquisar(Long id) throws SalaException {
+		Sala sala = salaRepository.findById(id).get();
+		validarRetorno(sala);
 		return sala;
 	}
 	
-	public Sala update(Sala sala) {
-		Sala salaDesatualizada = salaRepository.findById(sala.getId()).get();
-		BeanUtils.copyProperties(sala, salaDesatualizada, "id");
-		salaRepository.save(sala);
-		return sala;
-	}
 	
-	public void deletar(Long id) {
-		salaRepository.deleteById(id);
-	}
-	
-	public List<Sala> listar() {
-		return salaRepository.findAll();
-	}
-	
-	public Sala pesquisar(Long id) {
-		return salaRepository.findById(id).get();
+	private void validarRetorno(Sala sala) throws SalaException {
+		throw new SalaException("SALA NÃO CADASTRADA!");
 	}
 	
 }

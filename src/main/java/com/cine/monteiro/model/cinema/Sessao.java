@@ -2,13 +2,14 @@ package com.cine.monteiro.model.cinema;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
-import lombok.Data;
+import javax.validation.constraints.*;
+
+import lombok.*;
 
 @Data
 @Entity
@@ -27,20 +28,29 @@ public class Sessao {
 	@JoinColumn(name = "sala_fk")
 	private Sala sala;
 	
+	@NotBlank
 	@Column(name = "preco_ingresso")
 	private BigDecimal precoIngresso;
 	
+	@NotBlank
 	@Column(name = "hora_inicio_exibicao", columnDefinition = "TIME")
 	private LocalTime horaDeInicioExibicao;
 	
+	@Setter(value = AccessLevel.NONE)
 	@Column(name = "hora_termino_exibicao", columnDefinition = "TIME")
 	private LocalTime horaDeTerminoExibicao;
 	
+	@Future
+	@NotBlank
 	@Column(name = "inicio_periodo_exibicao", columnDefinition = "DATE")
 	private LocalDate inicioPeriodoExibicao;
 	
+	@NotBlank
 	@Column(name = "termino_periodo_exibicao", columnDefinition = "DATE")
 	private LocalDate terminoPeriodoExibicao;
+	
+	@Column(name = "data_registro_interrupcao", columnDefinition = "TIMESTAMP")
+	private LocalDateTime dataResgistroInterrupcao;
 	
 	@Column(name = "quantidade_vagas_disponiveis")
 	private Integer quantidadeVagasDisponiveis;
@@ -55,5 +65,6 @@ public class Sessao {
 	@CollectionTable(name = "TB_ASSENTOS_RESERVADOS_SESSAO")
 	@Column(name = "assentos_reservados_sessao")
 	private Set<String> assentosReservados;
+	
 	
 }

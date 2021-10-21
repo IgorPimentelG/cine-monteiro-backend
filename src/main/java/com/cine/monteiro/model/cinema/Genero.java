@@ -1,6 +1,8 @@
 package com.cine.monteiro.model.cinema;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+
 import lombok.Data;
 
 @Data
@@ -12,10 +14,15 @@ public class Genero {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	@Column(unique = true, nullable = false)
 	private String genero;
 	
 	@Column(nullable = true)
 	private String descricao;
+	
+	public String toString() {
+		return genero;
+	}
 
 }

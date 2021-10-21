@@ -1,8 +1,10 @@
 package com.cine.monteiro.model.users;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.br.*;
 
 import lombok.Data;
 
@@ -16,26 +18,32 @@ public abstract class Usuario {
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Long id;
 	
+	@CPF
+	@NotBlank
 	@Column(unique = true)
 	private String CPF;
 	
+	@NotBlank
 	private String nome;
 	
 	@Column(unique = true)
 	private String telefone;
 	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "data_nascimento")
-	private Date dataNascimento;
+	@Column(name = "data_nascimento", columnDefinition = "DATE", nullable = false)
+	private LocalDate dataNascimento;
 	
+	@Email
+	@NotBlank
 	@Column(unique = true)
 	private String email;
 	
+	@NotBlank
 	private String password;
 	
+	// Construtores
 	public Usuario() { }
 
-	public Usuario(String CPF, String nome, String telefone, Date dataNascimento, String email, String password) {
+	public Usuario(String CPF, String nome, String telefone, LocalDate dataNascimento, String email, String password) {
 		this.CPF = CPF;
 		this.nome = nome;
 		this.email = email;

@@ -1,12 +1,13 @@
 package com.cine.monteiro.services;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.cine.monteiro.exception.UserException;
 import com.cine.monteiro.model.users.Administrador;
 import com.cine.monteiro.repository.AdministradorRepository;
+import com.cine.monteiro.utils.UserUtils;
 
 @Service
 public class AdministradorService {
@@ -15,45 +16,73 @@ public class AdministradorService {
 	private AdministradorRepository administradorRepository;
 	
 	@Autowired
-	private PasswordEncoder encoder;
+	private UserUtils userUtils;
 	
-	public Administrador save(Administrador administrador) {
-		administrador.setPassword(encoder.encode(administrador.getPassword()));
-		administradorRepository.save(administrador);
-		return administrador;
-	}
-	
-	public Administrador deletar(Long id) {
-		Administrador administradorDeletado = administradorRepository.findById(id).get();
-		administradorRepository.deleteById(id);
-		return administradorDeletado;
-		
-	}
-	
-	public Administrador update(Administrador administrador) {
-		Administrador administradorDesatualizado = administradorRepository.findById(administrador.getId()).get();
-		BeanUtils.copyProperties(administrador, administradorDesatualizado, "id");
-		administradorRepository.save(administrador);
-		return administrador;
-		
-	}
-	
-	public Administrador pesquisar(Long id) {
-		Administrador administrador = administradorRepository.findById(id).get();
-		return administrador;
-	}
-	
-	public List<Administrador> listar() {
-		return administradorRepository.findAll();
-	}
-	
-	public Boolean validarSenha(String email, String password){
-		Optional<Administrador> optAdm = administradorRepository.findByEmail(email);
-		if(optAdm.isEmpty()) {
-			return false;
+	public Administrador salvar(Administrador administrador) throws UserException {
+
+		if(this.listar().size() == 3) { 
+			throw new UserException("LIMITE DE ADMINISTRADORES ALCANÇADO");
 		}
-		boolean valide = encoder.matches(password, optAdm.get().getPassword());
-		boolean result = (valide) ? true : false; 
-		return result;
+		
+		// Validações
+		userUtils.validarEmail(administrador.getEmail());
+		userUtils.validarPassword(administrador.getPassword());
+		
+		if(administradorRepository.findByEmail(administrador.getEmail()) != null) {
+			throw new UserException("ADMINISTRADOR JÁ CADASTRADO!");
+		}
+		
+		administrador.setPassword(userUtils.encodePassword(administrador.getPassword()));				// Encriptar Senha
+		
+		return administradorRepository.save(administrador);
 	}
+	
+	public Administrador deletar(Long id) throws UserException {
+		Administrador administrador = administradorRepository.findById(id).get();
+		
+		validarRetorno(administrador);
+		
+		administradorRepository.deleteById(id);
+		return administrador;
+	}
+	
+	public Administrador update(Administrador administrador) throws UserException  {
+		Administrador administradorDesatualizado = administradorRepository.findById(administrador.getId()).get();
+		
+		validarRetorno(administradorDesatualizado);
+		
+		BeanUtils.copyProperties(administrador, administradorDesatualizado, "id");
+
+		return administradorRepository.save(administrador);
+	}
+	
+	public Administrador pesquisar(Long id) throws UserException {
+		Administrador administrador = administradorRepository.findById(id).get();
+	
+		validarRetorno(administrador);
+		
+		return administrador;
+	}
+	
+	public List<Administrador> listar() throws UserException {
+		
+		List<Administrador> administradores = administradorRepository.findAll();
+	
+		if(administradores.isEmpty()) {
+			throw new UserException("NÃO EXISTE ADMINISTRADORES CADASTRADOS!");
+		}
+		
+		return administradores;
+	}
+	
+	private void validarRetorno(Administrador administrador) throws UserException {
+		if(administrador == null) {
+			throw new UserException("ADMINISTRADOR NÃO EXISTE!");
+		}
+	}
+	
+	public Administrador autenticar(String email, String password) throws UserException {
+		return userUtils.autenticarAdmin(email, password);
+	}
+	
 }

@@ -1,6 +1,6 @@
 package com.cine.monteiro.model.users;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.*;
 
@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "TB_ADMINISTRADOR")
 public class Administrador extends Usuario {
 
-	public Administrador(String CPF, String nome, String telefone, Date dataNascimento, String email, String password) {
+	public Administrador(String CPF, String nome, String telefone, LocalDate dataNascimento, String email, String password) {
 		super(CPF, nome, telefone, dataNascimento, email, password);
 	}
 	
