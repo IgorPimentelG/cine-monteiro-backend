@@ -52,7 +52,6 @@ public class SalaService {
 		return sala;
 	}
 	
-	
 	private void validarRetorno(Sala sala) throws SalaException {
 		throw new SalaException("SALA NÃO CADASTRADA!");
 	}
