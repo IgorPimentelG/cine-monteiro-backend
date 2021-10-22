@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.cine.monteiro.domain.model.user.Administrador;
+import com.cine.monteiro.domain.model.user.Cliente;
+import com.cine.monteiro.domain.repository.AdministradorRepository;
+import com.cine.monteiro.domain.repository.ClienteRepository;
 import com.cine.monteiro.exception.UserException;
-import com.cine.monteiro.model.users.Administrador;
-import com.cine.monteiro.model.users.Cliente;
-import com.cine.monteiro.repository.AdministradorRepository;
-import com.cine.monteiro.repository.ClienteRepository;
 
 @Component
 public class UserUtils {
