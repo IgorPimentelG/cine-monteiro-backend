@@ -20,7 +20,7 @@ public class Sessao {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne
 	@JoinColumn(name = "filme_fk")
 	private Filme filme;
 	
@@ -28,24 +28,20 @@ public class Sessao {
 	@JoinColumn(name = "sala_fk")
 	private Sala sala;
 	
-	@NotBlank
-	@Column(name = "preco_ingresso")
+	@Column(name = "preco_ingresso", nullable = false)
 	private BigDecimal precoIngresso;
 	
-	@NotBlank
-	@Column(name = "hora_inicio_exibicao", columnDefinition = "TIME")
+	@Column(name = "hora_inicio_exibicao", columnDefinition = "TIME", nullable = false)
 	private LocalTime horaDeInicioExibicao;
 	
-	@Setter(value = AccessLevel.NONE)
 	@Column(name = "hora_termino_exibicao", columnDefinition = "TIME")
 	private LocalTime horaDeTerminoExibicao;
 	
 	@Future
-	@NotBlank
 	@Column(name = "inicio_periodo_exibicao", columnDefinition = "DATE")
 	private LocalDate inicioPeriodoExibicao;
 	
-	@NotBlank
+	@Future
 	@Column(name = "termino_periodo_exibicao", columnDefinition = "DATE")
 	private LocalDate terminoPeriodoExibicao;
 	
@@ -65,6 +61,24 @@ public class Sessao {
 	@CollectionTable(name = "TB_ASSENTOS_RESERVADOS_SESSAO")
 	@Column(name = "assentos_reservados_sessao")
 	private Set<String> assentosReservados;
+	
+	public Sessao() {
+		this.isAtiva = true;
+	}
+	
+	public void adicionarAssentoReservado(String assento) {
+		assentosReservados.add(assento);
+	}
+	
+	public String toString() {
+		return "\nID: " + this.id + 
+				"\nPreço do Ingresso: R$ " + this.precoIngresso + 
+				"\nHora de início de exibição: " + this.horaDeInicioExibicao + 
+				"\nHora do término de exibição: " + this.horaDeTerminoExibicao +
+				"\nData de início de exibição: " + this.inicioPeriodoExibicao + 
+				"\nData do término de exibição: " + this.terminoPeriodoExibicao + 
+				"\nAtiva: " + (this.isAtiva ? "SIM" : "NÃO");
+	}
 	
 	
 }

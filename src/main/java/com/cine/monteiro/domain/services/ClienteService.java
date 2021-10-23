@@ -78,7 +78,9 @@ public class ClienteService {
 	}
 	
 	private void validarRetorno(Cliente cliente) throws UserException {
-		throw new UserException("USUÁRIO NÃO ENCONTRADO!");
+		if(cliente == null) {
+			throw new UserException("USUÁRIO NÃO ENCONTRADO!");
+		}
 	}
 	
 }

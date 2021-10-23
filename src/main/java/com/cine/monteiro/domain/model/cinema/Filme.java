@@ -4,8 +4,6 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-import org.hibernate.validator.constraints.Length;
-
 import com.cine.monteiro.domain.enums.*;
 
 @Data
@@ -26,21 +24,17 @@ public class Filme {
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Genero genero;
 	
-	@NotBlank
-	@Length(min = 15)
 	private Long duracao;
 	
-	@NotBlank
 	@Enumerated(EnumType.STRING)
-	@Column(name = "classificacao_etaria")
+	@Column(name = "classificacao_etaria", nullable = false)
 	private ClassificacaoEtaria classificacaoEtaria;
 	
-	@NotBlank
 	@Enumerated(EnumType.STRING)
 	private Legenda legenda;
 	
-	@NotBlank
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private Projecao projecao;
 	
 	public String toString() {

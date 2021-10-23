@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.cine.monteiro.domain.model.cinema.Sessao;
 import com.cine.monteiro.domain.services.SessaoService;
+import com.cine.monteiro.exception.FilmeException;
 import com.cine.monteiro.exception.SalaException;
 import com.cine.monteiro.exception.SessaoException;
 
@@ -21,7 +22,7 @@ public class SessaoController {
 	private SessaoService sessaoService;
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Sessao> cadastrar(@RequestBody @Valid Sessao sessao)throws SessaoException, SalaException {
+	public ResponseEntity<Sessao> cadastrar(@RequestBody @Valid Sessao sessao) throws SessaoException, SalaException, FilmeException {
 		sessaoService.cadastrar(sessao);
 		return ResponseEntity.ok(sessao);
 	}

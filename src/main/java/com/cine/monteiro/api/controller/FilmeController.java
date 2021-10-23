@@ -25,7 +25,7 @@ public class FilmeController {
 	private GeneroService generoService;
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Filme> cadastrar(@RequestBody @Valid Filme filme) {
+	public ResponseEntity<Filme> cadastrar(@RequestBody @Valid Filme filme) throws FilmeException {
 		filmeService.salvar(filme);
 		return ResponseEntity.ok(filme);
 	}

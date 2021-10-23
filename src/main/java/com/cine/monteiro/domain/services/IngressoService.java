@@ -9,13 +9,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.cine.monteiro.domain.enums.ClassificacaoEtaria;
-import com.cine.monteiro.domain.events.IngressoCanceladoEvent;
-import com.cine.monteiro.domain.events.IngressoEmitidoEvent;
-import com.cine.monteiro.domain.model.cinema.Filme;
-import com.cine.monteiro.domain.model.cinema.Ingresso;
-import com.cine.monteiro.domain.model.cinema.Sessao;
+import com.cine.monteiro.domain.events.*;
+import com.cine.monteiro.domain.model.cinema.*;
+import com.cine.monteiro.domain.model.user.Cliente;
 import com.cine.monteiro.domain.repository.IngressoRepository;
-import com.cine.monteiro.exception.IngressoException;
+import com.cine.monteiro.exception.*;
 
 @Service
 public class IngressoService {
@@ -24,14 +22,24 @@ public class IngressoService {
 	private IngressoRepository ingressoRepository;
 	
 	@Autowired
+	private SessaoService sessaoService;
+	
+	@Autowired
+	private FilmeService filmeService;
+	
+	@Autowired
+	private ClienteService clienteService;
+	
+	@Autowired
 	private ApplicationEventPublisher eventPublisher;
 	
-	public Ingresso registrarCompra(Ingresso ingresso) throws IngressoException {
+	public Ingresso registrarCompra(Ingresso ingresso) throws IngressoException, SessaoException, FilmeException, UserException {
 		
-		Sessao sessao = ingresso.getSessao();
-		Filme filme = sessao.getFilme();
+		Sessao sessao = sessaoService.buscar(ingresso.getSessao().getId());
+		Filme filme = filmeService.buscar(sessao.getFilme().getId());
+		Cliente cliente = clienteService.pesquisar(ingresso.getCliente().getId());
 		
-		int idadeCliente = calcularIdadeCliente(ingresso.getCliente().getDataNascimento());
+		int idadeCliente = calcularIdadeCliente(cliente.getDataNascimento());
 				
 		if(!sessao.isAtiva()) {
 			throw new IngressoException("SESSÃO ESTÁ DESATIVADA!");
@@ -56,6 +64,18 @@ public class IngressoService {
 			}
 
 		}
+		
+		// Verificar assentos reservados
+		if(ingresso.getAssentosReservados().size() != ingresso.getQuantidade()) {
+			throw new IngressoException("QUANTIDADE DE ASSENTOS RESERVADOS NÃO É A MESMA QUANTIDADE DE INGRESSOS COMPRADOS!");
+		}
+		
+		for(String assento : ingresso.getAssentosReservados()) {
+			if(sessao.getAssentosReservados().contains(assento)) {
+				throw new IngressoException("ASSENTOS JÁ RESERVADOS!");
+			}
+		}
+		
 		
 		eventPublisher.publishEvent(new IngressoEmitidoEvent(ingresso));
 		return ingressoRepository.save(ingresso);

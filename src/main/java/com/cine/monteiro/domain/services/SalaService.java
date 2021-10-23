@@ -16,7 +16,12 @@ public class SalaService {
 	@Autowired
 	private SalaRepository salaRepository;
 	
-	public Sala salvar(Sala sala) {
+	public Sala salvar(Sala sala) throws SalaException {
+		
+		if(!(sala.getQuantidadeAssentos() >= 15 && sala.getQuantidadeAssentos() <= 40)) {
+			throw new SalaException("SALA NÃO CONTÊM A QUANTIDADE NECESSÁRIA PARA CADASTRA");
+		}
+		
 		return salaRepository.save(sala);
 	}
 	
@@ -53,7 +58,9 @@ public class SalaService {
 	}
 	
 	private void validarRetorno(Sala sala) throws SalaException {
-		throw new SalaException("SALA NÃO CADASTRADA!");
+		if(sala == null) {
+			throw new SalaException("SALA NÃO CADASTRADA!");
+		}
 	}
 	
 }

@@ -3,15 +3,12 @@ package com.cine.monteiro.domain.model.cinema;
 import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.cine.monteiro.domain.model.user.Cliente;
 
 import lombok.Data;
-
-
 
 @Data
 @Entity
@@ -22,17 +19,14 @@ public class Ingresso {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cliente_fk")
 	private Cliente cliente;
 	
-	@NotBlank
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sessao_fk")
 	private Sessao sessao;
 
-	@NotBlank
 	private Integer quantidade;
 	
 	@Column(name = "valor_unitario")

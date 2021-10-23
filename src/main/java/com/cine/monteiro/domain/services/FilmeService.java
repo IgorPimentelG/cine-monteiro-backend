@@ -16,7 +16,12 @@ public class FilmeService {
 	@Autowired
 	private FilmeRepository filmeRepository;
 	
-	public Filme salvar(Filme filme) {
+	public Filme salvar(Filme filme) throws FilmeException {
+		
+		if(filme.getDuracao() < 15) {
+			throw new FilmeException("DURAÇÃO DO FILME MUITO CURTA!");
+		}
+		
 		return filmeRepository.save(filme);
 	}
 	

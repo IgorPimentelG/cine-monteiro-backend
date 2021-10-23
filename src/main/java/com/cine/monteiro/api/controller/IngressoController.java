@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.cine.monteiro.domain.model.cinema.Ingresso;
 import com.cine.monteiro.domain.services.IngressoService;
+import com.cine.monteiro.exception.FilmeException;
 import com.cine.monteiro.exception.IngressoException;
+import com.cine.monteiro.exception.SessaoException;
+import com.cine.monteiro.exception.UserException;
 
 @RestController
 @RequestMapping("/ingresso")
@@ -18,7 +21,7 @@ public class IngressoController {
 	private IngressoService ingressoService;
 	
 	@PostMapping("/comprar")
-	public ResponseEntity<Ingresso> comprar(@RequestBody @Valid Ingresso ingresso) throws IngressoException {
+	public ResponseEntity<Ingresso> comprar(@RequestBody @Valid Ingresso ingresso) throws IngressoException, SessaoException, FilmeException, UserException {
 		ingressoService.registrarCompra(ingresso);
 		return ResponseEntity.ok(ingresso); 
 	}
