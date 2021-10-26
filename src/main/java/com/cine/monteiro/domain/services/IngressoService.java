@@ -46,12 +46,12 @@ public class IngressoService {
 		} 
 		
 		// Verificar se o ingresso está sendo comprado 10 minutos antes de iniciar a exibição
-		if(!sessao.getHoraDeInicioExibicao().isBefore(LocalTime.now().plusMinutes(10))) {
+		if(LocalTime.now().plusMinutes(10).isAfter(sessao.getHoraDeInicioExibicao())) {
 			throw new IngressoException("TEMPO LIMITE PARA COMPRAR O INGRESSO JÁ FOI ATINGIDO!");
 		} 
 		
 		// Verificar se existe assentos disponíveis
-		if(ingresso.getSessao().getQuantidadeVagasDisponiveis() < ingresso.getQuantidade()) {	
+		if(sessao.getQuantidadeVagasDisponiveis() < ingresso.getQuantidade()) {	
 			throw new IngressoException("NÃO HÁ MAIS VAGAS DISPONÍVEIS!");
 		}
 		

@@ -4,17 +4,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cine.monteiro.domain.model.cinema.Filme;
-import com.cine.monteiro.domain.model.cinema.Sala;
-import com.cine.monteiro.domain.model.cinema.Sessao;
+import com.cine.monteiro.domain.model.cinema.*;
 import com.cine.monteiro.domain.repository.SalaRepository;
 import com.cine.monteiro.domain.repository.SessaoRepository;
-import com.cine.monteiro.exception.FilmeException;
-import com.cine.monteiro.exception.SalaException;
-import com.cine.monteiro.exception.SessaoException;
+import com.cine.monteiro.exception.*;
+
 
 @Service
 public class SessaoService {
@@ -120,6 +118,12 @@ public class SessaoService {
 		}
 		
 		return sessao;
+	}
+
+	public void update(Sessao sessao) { 
+		Sessao sessaoAntiga = sessaoRepository.findById(sessao.getId()).get();
+		BeanUtils.copyProperties(sessao, sessaoAntiga, "id");
+		sessaoRepository.save(sessao);
 	}
 	
 	private Sessao validarDesativacao(Long id) throws SessaoException {
