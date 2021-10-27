@@ -21,6 +21,14 @@ public class Genero {
 	@Column(nullable = true)
 	private String descricao;
 	
+	// Construtores
+	public Genero() { }
+	
+	public Genero(String genero, String descricao) {
+		this.genero = genero;
+		this.descricao = descricao;
+	}
+	
 	public String toString() {
 		return genero;
 	}

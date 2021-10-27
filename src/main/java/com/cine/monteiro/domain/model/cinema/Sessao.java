@@ -62,12 +62,25 @@ public class Sessao {
 	@Column(name = "assentos_reservados_sessao")
 	private Set<String> assentosReservados;
 	
-	public Sessao() {
-		this.isAtiva = true;
-	}
-	
 	public void adicionarAssentoReservado(String assento) {
 		assentosReservados.add(assento);
+	}
+	
+	// Construtores
+	public Sessao() { }
+	
+	public Sessao(Filme filme, Sala sala, BigDecimal precoIngresso, LocalTime horaDeInicioExibicao,
+			LocalTime horaDeTerminoExibicao, LocalDate inicioPeriodoExibicao,
+			LocalDate terminoPeriodoExibicao, Integer quantidadeVagasDisponiveis, boolean isAtiva) {
+		this.filme = filme;
+		this.sala = sala;
+		this.precoIngresso = precoIngresso;
+		this.horaDeInicioExibicao = horaDeInicioExibicao;
+		this.horaDeTerminoExibicao = horaDeTerminoExibicao;
+		this.inicioPeriodoExibicao = inicioPeriodoExibicao;
+		this.terminoPeriodoExibicao = terminoPeriodoExibicao;
+		this.quantidadeVagasDisponiveis = quantidadeVagasDisponiveis;
+		this.isAtiva = isAtiva;
 	}
 	
 	public String toString() {
@@ -79,6 +92,8 @@ public class Sessao {
 				"\nData do término de exibição: " + this.terminoPeriodoExibicao + 
 				"\nAtiva: " + (this.isAtiva ? "SIM" : "NÃO");
 	}
+
+	
 	
 	
 }

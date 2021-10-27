@@ -37,6 +37,20 @@ public class Filme {
 	@Column(nullable = false)
 	private Projecao projecao;
 	
+	// Construtores
+	public Filme() {}
+
+	public Filme(String titulo, String sinopse, Genero genero, Long duracao, ClassificacaoEtaria classificacaoEtaria, 
+			Legenda legenda, Projecao projecao) {
+		this.titulo = titulo;
+		this.sinopse = sinopse;
+		this.genero = genero;
+		this.duracao = duracao;
+		this.classificacaoEtaria = classificacaoEtaria;
+		this.legenda = legenda;
+		this.projecao = projecao;
+	}
+	
 	public String toString() {
 		return "\nID: " + this.id +
 				"\nTítulo: " + this.titulo +

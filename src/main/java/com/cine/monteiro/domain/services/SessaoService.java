@@ -1,5 +1,6 @@
 package com.cine.monteiro.domain.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -40,7 +41,8 @@ public class SessaoService {
 		sessao.setHoraDeTerminoExibicao(sessao.getHoraDeInicioExibicao().plusMinutes(filme.getDuracao()));
 		sessao.setQuantidadeVagasDisponiveis(sala.getQuantidadeAssentos());
 	
-		if(sessao.getInicioPeriodoExibicao().isAfter(sessao.getTerminoPeriodoExibicao())) {
+		if(sessao.getInicioPeriodoExibicao().isAfter(sessao.getTerminoPeriodoExibicao()) || 
+				sessao.getInicioPeriodoExibicao().isBefore(LocalDate.now())) {
 			throw new SessaoException("PERÍODO DE EXIBIÇÃO INVÁLIDO!");
 		}
 	
@@ -58,6 +60,10 @@ public class SessaoService {
 					}
 				}
 			}
+		}
+		
+		if(sessao.getInicioPeriodoExibicao().isEqual(LocalDate.now())) {
+			sessao.setAtiva(true);
 		}
 
 		//eventPublisher.publishEvent(new SessaoCadastradaEvent(sessao));

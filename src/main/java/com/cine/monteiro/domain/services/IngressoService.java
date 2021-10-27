@@ -1,5 +1,6 @@
 package com.cine.monteiro.domain.services;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
@@ -76,6 +77,9 @@ public class IngressoService {
 			}
 		}
 		
+		ingresso.setValorUnitario(sessao.getPrecoIngresso());
+		BigDecimal valorTotal = ingresso.getValorUnitario().multiply(new BigDecimal(ingresso.getQuantidade()));
+		ingresso.setValorTotal(valorTotal);
 		
 		eventPublisher.publishEvent(new IngressoEmitidoEvent(ingresso));
 		return ingressoRepository.save(ingresso);
