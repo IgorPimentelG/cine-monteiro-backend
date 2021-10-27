@@ -47,6 +47,14 @@ public class UserUtils {
 		}
 		throw new ValidationException("[ERROR VALIDATION] - E-MAIL NÃO CUMPRE OS REQUISITOS NECESSÁRIOS!");
 	}
+	
+	public void validarTelefone(String telefone) throws ValidationException {
+		
+		if(telefone.matches("^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{5}[- .]?\\d{4}$")) {
+			return;
+		}
+		throw new ValidationException("[ERROR VALIDATION] - TELEFONE NÃO CUMPRE OS REQUISITOS NECESSÁRIOS!");
+	}
 
 	public Cliente autenticarCliente(String email, String password) throws UserException {
 		

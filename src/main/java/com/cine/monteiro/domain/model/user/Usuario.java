@@ -26,7 +26,7 @@ public abstract class Usuario {
 	@NotBlank
 	private String nome;
 	
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	private String telefone;
 	
 	@Column(name = "data_nascimento", columnDefinition = "DATE", nullable = false)
