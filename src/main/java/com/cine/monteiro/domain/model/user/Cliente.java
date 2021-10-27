@@ -13,5 +13,13 @@ public class Cliente extends Usuario {
 	}
 	
 	public Cliente() { }
+
+	@Override
+	public String toString() {
+		return "Cliente [getId()=" + getId() + ", getCPF()=" + getCPF() + ", getNome()=" + getNome()
+				+ ", getTelefone()=" + getTelefone() + ", getDataNascimento()=" + getDataNascimento() + ", getEmail()="
+				+ getEmail() + ", getPassword()=" + getPassword() + ", hashCode()=" + hashCode() + ", toString()="
+				+ super.toString() + ", getClass()=" + getClass() + "]";
+	}
 	
 }
