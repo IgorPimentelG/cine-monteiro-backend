@@ -40,7 +40,8 @@ public class UserUtils {
 	public void validarEmail(String email) throws ValidationException {
 		
 		if(email.length() > 0) {
-			if(email.matches("^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$")) {
+			if(email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+				+"[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
 				return;
 			}
 		}
