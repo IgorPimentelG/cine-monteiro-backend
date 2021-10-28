@@ -84,8 +84,8 @@ public class SessaoServiceTest {
 		sessao.setTerminoPeriodoExibicao(LocalDate.parse("2021-11-15"));
 		//sessao.setDataResgistroInterrupcao(LocalDateTime.now());
 		sessao.setQuantidadeVagasDisponiveis(40);
-		//sessao.setAtiva(true);
-		sessao.setInterrompida(true);
+		sessao.setAtiva(true);
+		sessao.setInterrompida(false);
 		sessao.setInterrompidaPorUmDia(false);
 		HashSet<String> numAssentos = new HashSet<String>();
 		numAssentos.add("10");
