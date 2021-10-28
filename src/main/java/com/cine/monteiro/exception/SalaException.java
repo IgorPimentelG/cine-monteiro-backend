@@ -9,6 +9,6 @@ public class SalaException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public SalaException(String mensagem) {
-		super("[ERROR SALA] - " + mensagem);
+		super("[SALA ERROR] - " + mensagem);
 	}
 }

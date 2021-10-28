@@ -19,7 +19,7 @@ public class SalaService {
 	public Sala salvar(Sala sala) throws SalaException {
 		
 		if(!(sala.getQuantidadeAssentos() >= 15 && sala.getQuantidadeAssentos() <= 40)) {
-			throw new SalaException("SALA NÃO CONTÊM A QUANTIDADE NECESSÁRIA PARA CADASTRA");
+			throw new SalaException("SALA NÃO CONTÊM A QUANTIDADE DE ASSENTOS NECESSÁRIOS PARA SER CADASTRADA!");
 		}
 		
 		return salaRepository.save(sala);
