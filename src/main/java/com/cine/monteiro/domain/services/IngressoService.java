@@ -63,7 +63,6 @@ public class IngressoService {
 			if(idadeCliente < classificacaoEtaria) {
 				throw new IngressoException("CLASSIFICAÇÃO ETÁRIA IMPRÓPRIA");
 			}
-
 		}
 		
 		// Verificar assentos reservados
@@ -73,7 +72,7 @@ public class IngressoService {
 		
 		for(String assento : ingresso.getAssentosReservados()) {
 			if(sessao.getAssentosReservados().contains(assento)) {
-				throw new IngressoException("ASSENTOS JÁ RESERVADOS!");
+				throw new IngressoException("ASSENTO(S) JÁ RESERVADO(S)!");
 			}
 		}
 		
