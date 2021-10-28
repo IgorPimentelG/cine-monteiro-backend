@@ -47,7 +47,8 @@ public class SessaoService {
 		}
 	
 		// Validar horário da nova sessão
-		if(sessao.getHoraDeTerminoExibicao().isAfter(LocalTime.parse("00:00:00"))) {
+		if(sessao.getHoraDeTerminoExibicao().isAfter(LocalTime.parse("00:00:00")) &&
+				sessao.getHoraDeTerminoExibicao().isBefore(LocalTime.parse("07:00:00"))) {
 			throw new SessaoException("HORÁRIO NÃO DISPONÍVEL!");
 		}
 		

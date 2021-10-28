@@ -2,19 +2,22 @@ package com.cine.monteiro.utils;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
-import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.test.context.junit4.SpringRunner;
 import com.cine.monteiro.domain.model.user.Administrador;
 import com.cine.monteiro.domain.model.user.Cliente;
 import com.cine.monteiro.domain.repository.AdministradorRepository;
 import com.cine.monteiro.domain.repository.ClienteRepository;
 
 @SpringBootTest
-@Transactional
-class UserUtilsTest {
+@RunWith(SpringRunner.class)
+@SpringJUnitWebConfig
+public class UserUtilsTest {
 
 	@Autowired
 	private UserUtils userUtils;
@@ -33,7 +36,7 @@ class UserUtilsTest {
 		cliente.setNome("cliente1");
 		cliente.setDataNascimento(LocalDate.now());
 		cliente.setPassword("&Aabc123");
-		cliente.setCPF("133.069.590-90");
+		cliente.setCPF("133.069.590-90"); 
 		cliente.setTelefone("(083) 95014-0125");
 	
 		administrador = new Administrador();
