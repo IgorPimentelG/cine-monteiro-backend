@@ -51,5 +51,14 @@ public abstract class Usuario {
 		this.telefone = telefone;
 		this.dataNascimento = dataNascimento;
 	}
+	
+	public String toString() {
+		return "\nID: " + this.id +
+				"\nCPF: " + this.CPF + 
+				"\nNome: " + this.nome + 
+				"\nEmail: " + this.email + 
+				"\nTelefone: " + this.telefone + 
+				"\nData de Nascimento: " + this.dataNascimento;
+	}
 
 }

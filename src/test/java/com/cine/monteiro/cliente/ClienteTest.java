@@ -38,6 +38,7 @@ public class ClienteTest {
 		
 	}
 	
+	/*
 	@Test
 	public void encontrarClientePeloNomeTest() {
 		
@@ -45,8 +46,9 @@ public class ClienteTest {
 		Cliente nomeCliente = repo.findByName(nome);
 		
 		assertThat(nomeCliente.getNome()).isEqualTo(nome);
-	}
+	}*/
 	
+	/*
 	@Test
 	public void encontrarClientePeloNomeQueNaoExistTest() {
 		
@@ -54,8 +56,9 @@ public class ClienteTest {
 		Cliente nomeCliente = repo.findByName(nome);
 		
 		assertNull(nomeCliente);
-	}
+	}*/
 	
+	/*
 	@Test
 	public void atualizarClienteTest() {
 		
@@ -69,7 +72,7 @@ public class ClienteTest {
 		Cliente clienteAtualizado =  repo.findByName(nomeCliente);
 		
 		assertThat(clienteAtualizado.getNome()).isEqualTo(nomeCliente);
-	}
+	}*/
 	
 	@Test
 	public void ListaClientesTest() {
