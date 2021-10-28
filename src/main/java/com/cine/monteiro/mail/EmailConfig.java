@@ -1,5 +1,8 @@
 package com.cine.monteiro.mail;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,7 +14,7 @@ public class EmailConfig {
 	@Autowired
 	private JavaMailSender emailSender;
 	
-	public void enviarEmail(String destinatario, String titulo, String texto) {
+	public void enviarEmail(@NotBlank @Email String destinatario, @NotBlank String titulo, @NotBlank String texto) {
 		SimpleMailMessage mensagem = new SimpleMailMessage();
 		mensagem.setFrom("noreplay@cinemonteiro.com");
 		mensagem.setTo(destinatario);

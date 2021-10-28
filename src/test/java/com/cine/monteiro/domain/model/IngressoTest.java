@@ -1,6 +1,7 @@
-package com.cine.monteiro.model;
+package com.cine.monteiro.domain.model;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
@@ -21,7 +22,6 @@ import com.cine.monteiro.domain.model.cinema.*;
 import com.cine.monteiro.domain.model.user.Cliente;
 import com.cine.monteiro.domain.repository.*;
 import com.cine.monteiro.domain.services.IngressoService;
-
 
 
 @SpringBootTest
@@ -54,11 +54,11 @@ public class IngressoTest {
 	
 		Sala sala = new Sala("Sala 01", 40);
 		sala = salaRepository.save(sala);
-		assertNotNull(salaRepository.findById(sala.getId()).get());
+		assertNotNull(sala);
 		
 		Genero genero = new Genero("Ação", "Contém cenas de violência.");
 		genero = generoRepository.save(genero);
-		assertNotNull(generoRepository.findById(genero.getId()).get());
+		assertNotNull(genero);
 		
 		Filme filme = new Filme(
 				"As Passageiras",
@@ -69,20 +69,20 @@ public class IngressoTest {
 				Legenda.NONE,
 				Projecao.PROJECAO_2D);
 		filme = filmeRepository.save(filme);
-		assertNotNull(filmeRepository.findById(filme.getId()).get());
+		assertNotNull(filme);
 		
 		Sessao sessao = new Sessao(
 				filme,
 				sala,
-				new BigDecimal("20.00"),
-				LocalTime.parse("03:00:00"),
-				LocalTime.parse("03:00:00").plusMinutes(filme.getDuracao()),
-				LocalDate.parse("2021-10-29"),
-				LocalDate.parse("2021-11-15"),
+				new BigDecimal("20.00"),											// Preço
+				LocalTime.parse("21:00:00"),										// Hora de Início
+				LocalTime.parse("21:00:00").plusMinutes(filme.getDuracao()),		// Hora de Término
+				LocalDate.parse("2021-10-29"),										// Data de Início
+				LocalDate.parse("2021-11-15"),										// Data de Final
 				sala.getQuantidadeAssentos(),
-				true);
+				true);																// isAtivo
 		sessao = sessaoRepository.save(sessao);
-		assertNotNull(sessaoRepository.findById(sessao.getId()).get());
+		assertNotNull(sessao);
 	}
 
 	@Test
@@ -97,12 +97,11 @@ public class IngressoTest {
 				"882.446.861-62",
 				"Cláudio Nelson",
 				"(11) 99977-2153",
-				LocalDate.parse("2007-05-12"),				// 14
+				LocalDate.parse("2007-05-12"),				// IDADE:14
 				"claudio@hotmail.com",
 				"1235678");
 		cliente = clienteRepository.save(cliente);
-		assertNotNull(clienteRepository.findById(cliente.getId()).get());
-
+		assertNotNull(cliente);
 
 		Ingresso ingresso = new Ingresso();
 		ingresso.setCliente(cliente);
@@ -126,11 +125,11 @@ public class IngressoTest {
 				"342.487.628-38",
 				"Benedito Rafael",
 				"(53) 23957-4553",
-				LocalDate.parse("1990-03-23"),			// 31
-				"benedito@hotmail.com",
+				LocalDate.parse("1990-03-23"),			// IDADE: 31
+				"cinemonteiro.ads@gmail.com",
 				"1235678");
 		cliente = clienteRepository.save(cliente);
-		assertNotNull(clienteRepository.findById(cliente.getId()).get());
+		assertNotNull(cliente);
 		
 		Sessao sessao = sessaoRepository.findById(1L).get();
 		assertNotNull(sessao);
@@ -141,9 +140,7 @@ public class IngressoTest {
 		ingresso.setQuantidade(1);
 		ingresso.adicionarAssento("A1");
 				
-		try {
-			assertNotNull(ingressoService.registrarCompra(ingresso));
-		} catch(Exception erro) {}
+		assertDoesNotThrow( () -> ingressoService.registrarCompra(ingresso));
 		
 	}
 	
@@ -157,6 +154,7 @@ public class IngressoTest {
 		sessao.adicionarAssentoReservado("B1");
 		sessao.adicionarAssentoReservado("B2");
 		sessao = sessaoRepository.save(sessao);
+		assertNotNull(sessao);
 		
 		Ingresso ingresso = new Ingresso();
 		ingresso.setCliente(cliente);
@@ -175,12 +173,14 @@ public class IngressoTest {
 	
 	@Test
 	public void t5_testVagasIndisponiveis() {
+		
 		Cliente cliente = clienteRepository.findById(2L).get();
 		assertNotNull(cliente);
 		
 		Sessao sessao = sessaoRepository.findById(1L).get();
 		sessao.setQuantidadeVagasDisponiveis(0);
 		sessao = sessaoRepository.save(sessao);
+		assertNotNull(sessao);
 		
 		Ingresso ingresso = new Ingresso();
 		ingresso.setCliente(cliente);
@@ -215,14 +215,14 @@ public class IngressoTest {
 				filme,
 				sala,
 				new BigDecimal("20.00"),
-				LocalTime.parse("01:00:00"),
-				LocalTime.parse("01:00:00").plusMinutes(filme.getDuracao()),
+				LocalTime.parse("15:00:00"),
+				LocalTime.parse("15:00:00").plusMinutes(filme.getDuracao()),
 				LocalDate.parse("2021-10-29"),
 				LocalDate.parse("2021-11-15"),
 				sala.getQuantidadeAssentos(),
 				true);
 		sessao = sessaoRepository.save(sessao);
-		assertNotNull(sessaoRepository.findById(sessao.getId()).get());
+		assertNotNull(sessao);
 		
 		Ingresso ingresso = new Ingresso();
 		ingresso.setCliente(cliente);
@@ -240,6 +240,7 @@ public class IngressoTest {
 
 	@Test
 	public void t7_testCancelarCompraIngresso() {
+		
 		Cliente cliente = clienteRepository.findById(2L).get();
 		assertNotNull(cliente);
 		
@@ -255,12 +256,16 @@ public class IngressoTest {
 		try {
 			ingresso = ingressoService.registrarCompra(ingresso);
 			assertNotNull(ingresso);
-			assertNotNull(ingressoService.cancelarCompra(ingresso.getId()));
-		} catch(Exception erro) {}
+			
+			Ingresso ingressoCancelado = ingressoService.cancelarCompra(ingresso.getId());
+			assertNotNull(ingressoCancelado);
+		} catch (Exception erro) { }
+		
 	}
 	
 	@Test
 	public void t8_testCancelarCompraIngressoComTempoPassado() {
+		
 		Cliente cliente = clienteRepository.findById(2L).get();
 		assertNotNull(cliente);
 		
@@ -274,14 +279,14 @@ public class IngressoTest {
 				filme,
 				sala,
 				new BigDecimal("20.00"),
-				LocalTime.parse("03:00:00"),
-				LocalTime.parse("03:00:00").plusMinutes(filme.getDuracao()),
+				LocalTime.parse("21:00:00"),
+				LocalTime.parse("21:00:00").plusMinutes(filme.getDuracao()),
 				LocalDate.parse("2021-10-29"),
 				LocalDate.parse("2021-11-15"),
 				sala.getQuantidadeAssentos(),
 				true);
 		sessao = sessaoRepository.save(sessao);
-		assertNotNull(sessaoRepository.findById(sessao.getId()).get());
+		assertNotNull(sessao);
 		
 		Ingresso ingresso = new Ingresso();
 		ingresso.setCliente(cliente);
@@ -293,7 +298,7 @@ public class IngressoTest {
 			ingresso = ingressoService.registrarCompra(ingresso);
 			assertNotNull(ingresso);
 			
-			sessao.setHoraDeInicioExibicao(LocalTime.parse("01:00:00"));
+			sessao.setHoraDeInicioExibicao(LocalTime.parse("15:00:00"));
 			sessaoRepository.save(sessao);
 			
 			try {

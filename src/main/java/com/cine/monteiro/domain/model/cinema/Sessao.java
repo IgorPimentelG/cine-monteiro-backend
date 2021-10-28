@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -60,7 +61,7 @@ public class Sessao {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "TB_ASSENTOS_RESERVADOS_SESSAO")
 	@Column(name = "assentos_reservados_sessao")
-	private Set<String> assentosReservados;
+	private Set<String> assentosReservados = new HashSet<String>();
 	
 	public void adicionarAssentoReservado(String assento) {
 		assentosReservados.add(assento);
