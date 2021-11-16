@@ -63,10 +63,6 @@ public class Sessao {
 	@Column(name = "assentos_reservados_sessao")
 	private Set<String> assentosReservados = new HashSet<String>();
 	
-	public void adicionarAssentoReservado(String assento) {
-		assentosReservados.add(assento);
-	}
-	
 	// Construtores
 	public Sessao() { }
 	
@@ -82,6 +78,14 @@ public class Sessao {
 		this.terminoPeriodoExibicao = terminoPeriodoExibicao;
 		this.quantidadeVagasDisponiveis = quantidadeVagasDisponiveis;
 		this.isAtiva = isAtiva;
+	}
+	
+	public void adicionarAssentoReservado(String assento) {
+		assentosReservados.add(assento);
+	}
+	
+	public void removerAssentoReservado(String assento) {
+		assentosReservados.remove(assento);
 	}
 	
 	public String toString() {

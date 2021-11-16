@@ -7,7 +7,7 @@ import com.cine.monteiro.domain.events.IngressoCanceladoEvent;
 import com.cine.monteiro.domain.events.IngressoEmitidoEvent;
 import com.cine.monteiro.domain.model.cinema.Filme;
 import com.cine.monteiro.domain.model.cinema.Ingresso;
-import com.cine.monteiro.domain.model.user.Cliente;
+import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.mail.EmailConfig;
 
 public class NotificadorEmailListener {
@@ -19,7 +19,7 @@ public class NotificadorEmailListener {
 	public void enviarConfirmacaoCompra(IngressoEmitidoEvent event) {
 		
 		Ingresso ingresso = event.getIngresso();
-		Cliente cliente = event.getIngresso().getCliente();
+		User cliente = event.getIngresso().getCliente();
 		Filme filme = ingresso.getSessao().getFilme();
 		
 		String texto = String.format(
@@ -33,7 +33,7 @@ public class NotificadorEmailListener {
 	public void enviarConfirmacaoCancelamento(IngressoCanceladoEvent event) {
 		
 		Ingresso ingresso = event.getIngresso();
-		Cliente cliente = event.getIngresso().getCliente();
+		User cliente = event.getIngresso().getCliente();
 		Filme filme = ingresso.getSessao().getFilme();
 		
 		String texto = String.format(

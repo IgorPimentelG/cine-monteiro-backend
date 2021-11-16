@@ -1,4 +1,4 @@
-package com.cine.monteiro.domain.model;
+package com.cine.monteiro.junit.domain.model;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cine.monteiro.domain.enums.*;
 import com.cine.monteiro.domain.model.cinema.*;
-import com.cine.monteiro.domain.model.user.Cliente;
+import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.repository.*;
 import com.cine.monteiro.domain.services.IngressoService;
 
@@ -44,7 +44,7 @@ public class IngressoTest {
 	private SessaoRepository sessaoRepository;
 	
 	@Autowired
-	private ClienteRepository clienteRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
 	private IngressoService ingressoService;
@@ -93,14 +93,14 @@ public class IngressoTest {
 		Sessao sessao = sessaoRepository.findById(1L).get();
 		assertNotNull(sessao);
 		
-		Cliente cliente = new Cliente(
+		User cliente = new User(
 				"882.446.861-62",
 				"Cláudio Nelson",
 				"(11) 99977-2153",
 				LocalDate.parse("2007-05-12"),				// IDADE:14
 				"claudio@hotmail.com",
-				"1235678");
-		cliente = clienteRepository.save(cliente);
+				"1235678", "ROLE_USER");
+		cliente = userRepository.save(cliente);
 		assertNotNull(cliente);
 
 		Ingresso ingresso = new Ingresso();
@@ -121,14 +121,14 @@ public class IngressoTest {
 	
 		// Classificação Etária: MAIOR OU IGUAL 16
 		
-		Cliente cliente = new Cliente(
+		User cliente = new User(
 				"342.487.628-38",
 				"Benedito Rafael",
 				"(53) 23957-4553",
 				LocalDate.parse("1990-03-23"),			// IDADE: 31
 				"cinemonteiro.ads@gmail.com",
-				"1235678");
-		cliente = clienteRepository.save(cliente);
+				"1235678", "ROLE_USER");
+		cliente = userRepository.save(cliente);
 		assertNotNull(cliente);
 		
 		Sessao sessao = sessaoRepository.findById(1L).get();
@@ -146,7 +146,7 @@ public class IngressoTest {
 	
 	@Test
 	public void t4_testCompraIngressoAssentoJaReservado() {
-		Cliente cliente = clienteRepository.findById(2L).get();
+		User cliente = userRepository.findById(2L).get();
 		assertNotNull(cliente);
 		
 		Sessao sessao = sessaoRepository.findById(1L).get();
@@ -174,7 +174,7 @@ public class IngressoTest {
 	@Test
 	public void t5_testVagasIndisponiveis() {
 		
-		Cliente cliente = clienteRepository.findById(2L).get();
+		User cliente = userRepository.findById(2L).get();
 		assertNotNull(cliente);
 		
 		Sessao sessao = sessaoRepository.findById(1L).get();
@@ -202,7 +202,7 @@ public class IngressoTest {
 	@Test
 	public void t6_testCompraIngressoHorarioInvalido() {
 		
-		Cliente cliente = clienteRepository.findById(2L).get();
+		User cliente = userRepository.findById(2L).get();
 		assertNotNull(cliente);
 		
 		Filme filme = filmeRepository.findById(1L).get();
@@ -241,7 +241,7 @@ public class IngressoTest {
 	@Test
 	public void t7_testCancelarCompraIngresso() {
 		
-		Cliente cliente = clienteRepository.findById(2L).get();
+		User cliente = userRepository.findById(2L).get();
 		assertNotNull(cliente);
 		
 		Sessao sessao = sessaoRepository.findById(1L).get();
@@ -266,7 +266,7 @@ public class IngressoTest {
 	@Test
 	public void t8_testCancelarCompraIngressoComTempoPassado() {
 		
-		Cliente cliente = clienteRepository.findById(2L).get();
+		User cliente = userRepository.findById(2L).get();
 		assertNotNull(cliente);
 		
 		Filme filme = filmeRepository.findById(1L).get();

@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.cine.monteiro.domain.model.user.Administrador;
-import com.cine.monteiro.domain.model.user.Cliente;
-import com.cine.monteiro.domain.repository.AdministradorRepository;
-import com.cine.monteiro.domain.repository.ClienteRepository;
+import com.cine.monteiro.domain.model.user.User;
+import com.cine.monteiro.domain.repository.UserRepository;
 import com.cine.monteiro.exception.UserException;
 
 @Component
@@ -19,10 +17,7 @@ public class UserUtils {
 	private PasswordEncoder encoder;
 	
 	@Autowired
-	private ClienteRepository clienteRepository;
-	
-	@Autowired
-	private AdministradorRepository administradorRepository;
+	private UserRepository userRepository;
 	
 	public String encodePassword(String password) {
 		return encoder.encode(password);
@@ -56,37 +51,19 @@ public class UserUtils {
 		throw new ValidationException("[ERROR VALIDATION] - TELEFONE NÃO CUMPRE OS REQUISITOS NECESSÁRIOS!");
 	}
 
-	public Cliente autenticarCliente(String email, String password) throws UserException {
+	public User autenticar(String email, String password) throws UserException {
 		
-		Cliente cliente = clienteRepository.findByEmail(email);
-		
-		if(cliente == null) {
+		User user = userRepository.findByEmail(email);
+
+		if(user == null) {
 			throw new UserException("E-MAIL NÃO CADASTRADO!");
-		}
-		
-		boolean isValid = encoder.matches(password, cliente.getPassword());
-		
-		if(isValid) {
-			return cliente;
 		} else {
-			throw new UserException("SENHA INCORRETA!");
+			if(encoder.matches(password, user.getPassword())) {
+				return user;
+			} else {
+				throw new UserException("SENHA INCORRETA!");
+			}
 		}
-	}
-	
-	public Administrador autenticarAdmin(String email, String password) throws UserException {
-		
-		Administrador administrador = administradorRepository.findByEmail(email);
-		
-		if(administrador == null) {
-			throw new UserException("E-MAIL NÃO CADASTRADO!");
-		}
-		
-		boolean isValid = encoder.matches(password, administrador.getPassword());
-		
-		if(isValid) {
-			return administrador;
-		} else {
-			throw new UserException("SENHA INCORRETA!");
-		}
+
 	}
 }

@@ -1,4 +1,4 @@
-package com.cine.monteiro.domain.services;
+package com.cine.monteiro.junit.domain.services;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.math.BigDecimal;
@@ -20,6 +20,10 @@ import com.cine.monteiro.domain.model.cinema.Filme;
 import com.cine.monteiro.domain.model.cinema.Genero;
 import com.cine.monteiro.domain.model.cinema.Sala;
 import com.cine.monteiro.domain.model.cinema.Sessao;
+import com.cine.monteiro.domain.services.FilmeService;
+import com.cine.monteiro.domain.services.GeneroService;
+import com.cine.monteiro.domain.services.SalaService;
+import com.cine.monteiro.domain.services.SessaoService;
 
 
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.cine.monteiro.domain.enums.ClassificacaoEtaria;
 import com.cine.monteiro.domain.events.*;
 import com.cine.monteiro.domain.model.cinema.*;
-import com.cine.monteiro.domain.model.user.Cliente;
+import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.repository.IngressoRepository;
 import com.cine.monteiro.exception.*;
 
@@ -29,7 +29,7 @@ public class IngressoService {
 	private FilmeService filmeService;
 	
 	@Autowired
-	private ClienteService clienteService;
+	private UserService userService;
 	
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
@@ -38,7 +38,7 @@ public class IngressoService {
 		
 		Sessao sessao = sessaoService.buscar(ingresso.getSessao().getId());
 		Filme filme = filmeService.buscar(sessao.getFilme().getId());
-		Cliente cliente = clienteService.pesquisar(ingresso.getCliente().getId());
+		User cliente = userService.pesquisar(ingresso.getCliente().getId());
 		
 		int idadeCliente = calcularIdadeCliente(cliente.getDataNascimento());
 				

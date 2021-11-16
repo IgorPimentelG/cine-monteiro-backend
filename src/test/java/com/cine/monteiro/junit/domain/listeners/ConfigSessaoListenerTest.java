@@ -1,4 +1,4 @@
-package com.cine.monteiro.domain.listeners;
+package com.cine.monteiro.junit.domain.listeners;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,8 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cine.monteiro.domain.enums.*;
 import com.cine.monteiro.domain.events.IngressoEmitidoEvent;
+import com.cine.monteiro.domain.listeners.ConfigSessaoListener;
 import com.cine.monteiro.domain.model.cinema.*;
-import com.cine.monteiro.domain.model.user.Cliente;
+import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.repository.*;
 
 
@@ -43,7 +44,7 @@ class ConfigSessaoListenerTest {
 	private SessaoRepository sessaoRepository;
 	
 	@Autowired
-	private ClienteRepository clienteRepository;
+	private UserRepository userRepository;
 
 	@Autowired
 	private IngressoRepository ingressoRepository;
@@ -86,14 +87,14 @@ class ConfigSessaoListenerTest {
 		sessao = sessaoRepository.save(sessao);
 		assertNotNull(sessao);
 		
-		Cliente cliente = new Cliente(
+		User cliente = new User(
 				"342.487.628-38",
 				"Benedito Rafael",
 				"(53) 23957-4553",
 				LocalDate.parse("1990-03-23"),			
 				"cinemonteiro.ads@gmail.com",
-				"1235678");
-		cliente = clienteRepository.save(cliente);
+				"1235678", "ROLE_USER");
+		cliente = userRepository.save(cliente);
 		assertNotNull(cliente);
 		
 		Ingresso ingresso = new Ingresso();

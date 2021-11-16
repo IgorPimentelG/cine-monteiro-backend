@@ -1,4 +1,4 @@
-package com.cine.monteiro.domain.services;
+package com.cine.monteiro.junit.domain.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.cine.monteiro.domain.model.user.Cliente;
-import com.cine.monteiro.domain.repository.ClienteRepository;
+import com.cine.monteiro.domain.model.user.User;
+import com.cine.monteiro.domain.repository.UserRepository;
 
 
 
@@ -24,37 +24,37 @@ import com.cine.monteiro.domain.repository.ClienteRepository;
 public class ClienteServiceTest {
 	
 	@Autowired
-	private ClienteRepository clienteRepository;
+	private UserRepository userRepository;
 	
-	private Cliente cliente;
+	private User cliente;
 	
 	//método vai rodar antes e depois de cada teste
 	@BeforeEach
 	public void init() {
-		cliente = new Cliente("12388400430", "Tadeu", "99885564", LocalDate.now(), "testes@gmail.com", "teste123");
+		cliente = new User("12388400430", "Tadeu", "99885564", LocalDate.now(), "testes@gmail.com", "teste123", "ROLE_USER");
 	}
 
 	@Test
 	public void testCadastrar() {
-		clienteRepository.save(cliente);
-		Cliente getCliente = clienteRepository.findByEmail("testes@gmail.com");
+		userRepository.save(cliente);
+		User getCliente = userRepository.findByEmail("testes@gmail.com");
 		assertNotNull(getCliente);
 	}
 	
 	@Test
 	public void testDeletar() {
 		Long id = 1L;
-		boolean existeAntesDeDeletar= clienteRepository.findById(id).isPresent();
-		clienteRepository.deleteById(id);
-		boolean naoExisteDepoisDeDeletar = clienteRepository.findById(id).isPresent();
+		boolean existeAntesDeDeletar= userRepository.findById(id).isPresent();
+		userRepository.deleteById(id);
+		boolean naoExisteDepoisDeDeletar = userRepository.findById(id).isPresent();
 		assertTrue(existeAntesDeDeletar);
 		assertFalse(naoExisteDepoisDeDeletar);
 	}
 	
 	@Test
 	public void testListar() {
-		clienteRepository.save(cliente);
-		List<Cliente> clientes = clienteRepository.findAll();
+		userRepository.save(cliente);
+		List<User> clientes = userRepository.findAll();
 		assertEquals(1, clientes.size());
 	}
 

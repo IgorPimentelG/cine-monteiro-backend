@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.cine.monteiro.domain.model.cinema.Sessao;
@@ -22,18 +23,21 @@ public class SessaoController {
 	private SessaoService sessaoService;
 	
 	@PostMapping("/cadastrar")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Sessao> cadastrar(@RequestBody @Valid Sessao sessao) throws SessaoException, SalaException, FilmeException {
 		sessaoService.cadastrar(sessao);
 		return ResponseEntity.ok(sessao);
 	}
 	
 	@PutMapping("/interromper/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Sessao> interromperEmUmDia(@PathVariable Long id) throws SessaoException {
 		Sessao sessao = sessaoService.interromperEmUmDia(id);
 		return ResponseEntity.ok(sessao);
 	}
 	
 	@PutMapping("/desativar/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Sessao> desativar(@PathVariable Long id) throws SessaoException {
 		Sessao sessao = sessaoService.desativar(id);
 		return ResponseEntity.ok(sessao);

@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.cine.monteiro.domain.model.user.Cliente;
+import com.cine.monteiro.domain.model.user.User;
 
 import lombok.Data;
 
@@ -22,7 +22,7 @@ public class Ingresso {
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cliente_fk")
-	private Cliente cliente;
+	private User cliente;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sessao_fk")

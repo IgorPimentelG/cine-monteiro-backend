@@ -1,4 +1,4 @@
-package com.cine.monteiro.domain.model;
+package com.cine.monteiro.junit.domain.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
