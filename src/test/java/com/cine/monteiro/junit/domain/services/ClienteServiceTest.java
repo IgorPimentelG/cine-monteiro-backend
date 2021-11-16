@@ -35,14 +35,14 @@ public class ClienteServiceTest {
 	}
 
 	@Test
-	public void testCadastrar() {
+	public void A_testSalvar() {
 		userRepository.save(cliente);
 		User getCliente = userRepository.findByEmail("testes@gmail.com");
 		assertNotNull(getCliente);
 	}
 	
 	@Test
-	public void testDeletar() {
+	public void B_testDeletar() {
 		Long id = 1L;
 		boolean existeAntesDeDeletar= userRepository.findById(id).isPresent();
 		userRepository.deleteById(id);
@@ -52,20 +52,26 @@ public class ClienteServiceTest {
 	}
 	
 	@Test
-	public void testListar() {
+	public void C_testListar() {
 		userRepository.save(cliente);
 		List<User> clientes = userRepository.findAll();
 		assertEquals(1, clientes.size());
 	}
 
-//	@Test
-//	public void testPesquisar() {
-//
-//	}
-//
-//	@Test
-//	public void testUpdate() {
-//
-//	}
+	@Test
+	public void D_testPesquisar() {
+		User getCliente = userRepository.findById(2L).get();
+		assertNotNull(getCliente);
+	}
+
+	@Test
+	public void E_testUpdate() {
+		User getCliente = userRepository.findById(2L).get();
+		getCliente.setEmail("email@gmail.com");
+		userRepository.save(getCliente);
+		
+		User getClienteAlterado = userRepository.findById(2L).get();
+		assertEquals("email@gmail.com", getClienteAlterado.getEmail());
+	}
 
 }
