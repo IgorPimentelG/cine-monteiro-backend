@@ -57,7 +57,7 @@ public class SessaoService {
 				if(sessaoCadastrada.isAtiva() || sessaoCadastrada.isInterrompidaPorUmDia()) {
 					if(!(sessao.getHoraDeInicioExibicao().isAfter(sessaoCadastrada.getHoraDeTerminoExibicao())
 					   || sessao.getHoraDeTerminoExibicao().isBefore(sessaoCadastrada.getHoraDeInicioExibicao()))) {
-						throw new SessaoException("HORÁRIO NÃO DISPONÍVEL!");
+						throw new SessaoException("HORÁRIO INDISPONÍVEL!");
 					}
 				}
 			}
