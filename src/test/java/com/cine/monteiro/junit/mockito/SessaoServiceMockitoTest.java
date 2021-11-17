@@ -2,7 +2,9 @@ package com.cine.monteiro.junit.mockito;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,7 +45,7 @@ public class SessaoServiceMockitoTest {
 	@Mock
 	private SalaRepository salaRepository;
 	
-	@InjectMocks //cria uma instância real e injeta os objetos @Mock.
+	@InjectMocks //cria uma instância e injeta os objetos @Mock.
 	private SessaoService sessaoService;
 	
 	private SalaService salaService = mock(SalaService.class);
@@ -116,16 +118,27 @@ public class SessaoServiceMockitoTest {
 	
 	//buscarException
 	@Test
-	public void t3_test() {
-		NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> sessaoService.buscar(2L));
-		assertEquals("No value present", exception.getMessage());
+	public void t3_test() throws Exception {
+		SessaoService mockServiceSessao = mock(SessaoService.class);
+		doThrow(new SessaoException("SESSÃO NÃO CADASTRADA!")).when(mockServiceSessao).buscar(anyLong());
+		
+		SessaoException exception = assertThrows(SessaoException.class, () -> mockServiceSessao.buscar(anyLong()));
+		assertEquals("[ERROR SESSÃO] - SESSÃO NÃO CADASTRADA!", exception.getMessage());
+		
+		verify(mockServiceSessao, times(1)).buscar(anyLong());
 	}
 	
 	//listarDiaAtualException 
 	@Test
-	public void t4_test() {
-		SessaoException sessaoException = assertThrows(SessaoException.class, () -> sessaoService.listarDiaAtual());
+	public void t4_test() throws Exception {
+		
+		SessaoService mockServiceSessao = mock(SessaoService.class);
+		doThrow(new SessaoException("NÃO EXISTE SESSÕES CADASTRADAS PARA ESTE DIA!")).when(mockServiceSessao).listarDiaAtual();
+		
+		SessaoException sessaoException = assertThrows(SessaoException.class, () -> mockServiceSessao.listarDiaAtual());
 		assertEquals("[ERROR SESSÃO] - NÃO EXISTE SESSÕES CADASTRADAS PARA ESTE DIA!", sessaoException.getMessage());
+		
+		verify(mockServiceSessao, times(1)).listarDiaAtual();
 	}
 	
 	//listarDiaAtualSemException
