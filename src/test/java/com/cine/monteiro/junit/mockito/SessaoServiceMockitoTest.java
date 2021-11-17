@@ -9,8 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
@@ -79,7 +79,7 @@ public class SessaoServiceMockitoTest {
 		//alteração 1
 		sessao.setInicioPeriodoExibicao(LocalDate.now());
 		sessao.setHoraDeInicioExibicao(LocalTime.parse("23:30:00"));
-		
+		 
 		SessaoException sessaoException2 = assertThrows(SessaoException.class, () -> sessaoService.cadastrar(sessao));  
 		assertEquals("[ERROR SESSÃO] - HORÁRIO NÃO DISPONÍVEL!", sessaoException2.getMessage());
 		
@@ -91,13 +91,19 @@ public class SessaoServiceMockitoTest {
 		SessaoException sessaoException3 = assertThrows(SessaoException.class, () -> sessaoService.cadastrar(sessao));
 		assertEquals("[ERROR SESSÃO] - HORÁRIO INDISPONÍVEL!", sessaoException3.getMessage());
 		
-		verify(salaService, times(3)).pesquisar(1L);
-		verify(filmeService, times(3)).buscar(1L);
+		//alteração 3
+		sessao.setInterrompidaPorUmDia(false);
+		sessao.setHoraDeTerminoExibicao(LocalTime.parse("23:40:00"));
+				
+		assertDoesNotThrow(() -> sessaoService.cadastrar(sessao));
+		
+		verify(salaService, times(4)).pesquisar(1L);
+		verify(filmeService, times(4)).buscar(1L);
 	}
 	
-	//buscar 
+	//buscarSemException
 	@Test
-	public void t2_test() throws SessaoException{
+	public void t2_test() {
 		Sessao name = new Sessao();
 		name.setId(2L);
 		Optional<Sessao> sessao = Optional.of(name);
@@ -108,19 +114,40 @@ public class SessaoServiceMockitoTest {
 		verify(sessaoRepository, times(1)).findById(2L);
 	}
 	
-	//listarDiaAtual 
+	//buscarException
 	@Test
-	public void t3_test() throws Exception {
-		
-		when(sessaoRepository.buscarSessoesDoDia(LocalTime.now())).thenReturn(new ArrayList<Sessao>());
+	public void t3_test() {
+		NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> sessaoService.buscar(2L));
+		assertEquals("No value present", exception.getMessage());
+	}
+	
+	//listarDiaAtualException 
+	@Test
+	public void t4_test() {
 		SessaoException sessaoException = assertThrows(SessaoException.class, () -> sessaoService.listarDiaAtual());
 		assertEquals("[ERROR SESSÃO] - NÃO EXISTE SESSÕES CADASTRADAS PARA ESTE DIA!", sessaoException.getMessage());
+	}
+	
+	//listarDiaAtualSemException
+	@Test
+	public void t5_test() throws Exception {
 		
-		Sessao sessao = new Sessao();
-		sessao.setId(1L);
-		LinkedList<Sessao> mockSessoes = mock(LinkedList.class);
+		Sessao sessao = mock(Sessao.class);
+		when(sessao.isAtiva()).thenReturn(true);
+		when(sessao.getHoraDeInicioExibicao()).thenReturn(LocalTime.now());
+		
+		LinkedList<Sessao> mockSessoes = mock(LinkedList.class); 
 		when(mockSessoes.get(0)).thenReturn(sessao);
 		
+		assertEquals(sessao, mockSessoes.get(0));
+		verify(mockSessoes, times(1)).get(0);
+		
+		SessaoService mockServiceSessao = mock(SessaoService.class); 
+		when(mockServiceSessao.listarDiaAtual()).thenReturn(mockSessoes);
+
+		assertDoesNotThrow(() -> mockServiceSessao.listarDiaAtual());
+		
+		verify(mockServiceSessao, times(1)).listarDiaAtual();
 	}
 	
 }
