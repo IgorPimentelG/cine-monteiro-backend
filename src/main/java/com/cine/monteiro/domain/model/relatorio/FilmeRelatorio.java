@@ -25,7 +25,6 @@ public class FilmeRelatorio extends Relatorio {
 
 	// Construtores
 	public FilmeRelatorio(Filme filme) {
-		super();
 		this.filme = filme;
 		this.totalExibicoes = 0;
 		this.totalDeSessoes = 0;

@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.cine.monteiro.domain.model.cinema.Ingresso;
@@ -21,13 +22,14 @@ public class IngressoController {
 	private IngressoService ingressoService;
 	
 	@PostMapping("/comprar")
+	@PreAuthorize("hasRole('CLIENT')")
 	public ResponseEntity<Ingresso> comprar(@RequestBody @Valid Ingresso ingresso) throws IngressoException, SessaoException, FilmeException, UserException {
 		ingressoService.registrarCompra(ingresso);
 		return ResponseEntity.ok(ingresso); 
 	}
 	
 	@DeleteMapping("/cancelar/{id}")
-	public ResponseEntity<Ingresso> cancelar(@PathVariable Long id) throws IngressoException {
+	public ResponseEntity<Ingresso> cancelar(@PathVariable Long id) throws IngressoException, SessaoException {
 		Ingresso ingresso = ingressoService.cancelarCompra(id);
 		return ResponseEntity.ok(ingresso);
 	}

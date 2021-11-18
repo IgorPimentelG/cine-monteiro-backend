@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.cine.monteiro.domain.model.cinema.Sala;
@@ -20,12 +21,14 @@ public class SalaController {
 	private SalaService salaService;
 	
 	@PostMapping("/cadastrar")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Sala> cadastrar(@RequestBody @Valid Sala sala) throws SalaException {
 		salaService.salvar(sala);
 		return ResponseEntity.ok(sala);
 	}
 		
 	@DeleteMapping("/deletar/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Sala> deletar(@PathVariable Long id) throws SalaException {
 		Sala sala = salaService.deletar(id);
 		return ResponseEntity.ok(sala);

@@ -109,7 +109,7 @@ class ConfigSessaoListenerTest {
 		assertEquals(0, sessao.getAssentosReservados().size());
 		
 		IngressoEmitidoEvent event = new IngressoEmitidoEvent(ingresso);
-		assertDoesNotThrow(() -> configSessaoListener.reconfigurarSessao(event));
+		assertDoesNotThrow(() -> configSessaoListener.reconfigurarSessaoIngressoComprado(event));
 		
 		sessao = sessaoRepository.findById(sessao.getId()).get();
 		assertEquals(2, sessao.getAssentosReservados().size());

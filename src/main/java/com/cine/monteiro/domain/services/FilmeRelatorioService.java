@@ -15,6 +15,7 @@ public class FilmeRelatorioService {
 
 	public void registrarRelatorio(Filme filme) {	
 		FilmeRelatorio filmeRelatorio = new FilmeRelatorio(filme);
+		
 		filmeRelatorioRepository.save(filmeRelatorio);
 	}
 	

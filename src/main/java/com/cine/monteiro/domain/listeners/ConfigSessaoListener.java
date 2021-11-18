@@ -10,14 +10,21 @@ import com.cine.monteiro.domain.model.cinema.Sessao;
 import com.cine.monteiro.domain.services.SessaoService;
 import com.cine.monteiro.exception.SessaoException;
 
+import lombok.Data;
+
 @Component
+@Data
 public class ConfigSessaoListener {
-	
-	@Autowired
+
 	private SessaoService sessaoService;
 	
+	@Autowired
+	public ConfigSessaoListener(SessaoService sessaoService) {
+		this.sessaoService = sessaoService;
+	}
+	
 	@EventListener
-	public void reconfigurarSessao(IngressoEmitidoEvent event) throws SessaoException {
+	public void reconfigurarSessaoIngressoComprado(IngressoEmitidoEvent event) throws SessaoException {
 		
 		Sessao sessao = sessaoService.buscar(event.getIngresso().getSessao().getId());
 		
@@ -46,7 +53,6 @@ public class ConfigSessaoListener {
 		}
 		
 		sessaoService.update(sessao);
-		
 	}
 
 }

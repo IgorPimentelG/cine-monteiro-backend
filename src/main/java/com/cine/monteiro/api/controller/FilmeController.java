@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.cine.monteiro.domain.model.cinema.Filme;
@@ -25,17 +26,20 @@ public class FilmeController {
 	private GeneroService generoService;
 	
 	@PostMapping("/cadastrar")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Filme> cadastrar(@RequestBody @Valid Filme filme) throws FilmeException {
 		filmeService.salvar(filme);
 		return ResponseEntity.ok(filme);
 	}
 	
 	@PostMapping("/cadastrar/genero")
+	@PreAuthorize("hasRole('ADMIN')")
 	public Genero cadastrarGenero(@RequestBody @Valid Genero genero) {
 		return generoService.salvar(genero);
 	}
 	
 	@PutMapping("/atualizar")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Filme> update(@RequestBody Filme filme) throws FilmeException {
 		Filme filmeAtualizado = filmeService.atualizar(filme);
 		return ResponseEntity.ok(filmeAtualizado);

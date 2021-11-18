@@ -15,24 +15,29 @@ import com.cine.monteiro.domain.model.cinema.*;
 import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.repository.IngressoRepository;
 import com.cine.monteiro.exception.*;
+import com.cine.monteiro.utils.Promocional;
 
 @Service
 public class IngressoService {
 
-	@Autowired
+	// Dependencias
 	private IngressoRepository ingressoRepository;
-	
-	@Autowired
 	private SessaoService sessaoService;
-	
-	@Autowired
 	private FilmeService filmeService;
-	
-	@Autowired
 	private UserService userService;
+	private ApplicationEventPublisher eventPublisher;
+	private Promocional promocional;
 	
 	@Autowired
-	private ApplicationEventPublisher eventPublisher;
+	public IngressoService(IngressoRepository ingressoRepository, SessaoService sessaoService, FilmeService filmeService, 
+			UserService userService, ApplicationEventPublisher eventPublisher, Promocional promocional) {
+		this.ingressoRepository = ingressoRepository;
+		this.sessaoService = sessaoService;
+		this.filmeService = filmeService;
+		this.userService = userService;
+		this.eventPublisher = eventPublisher;
+		this.promocional = promocional;
+	}
 	
 	public Ingresso registrarCompra(Ingresso ingresso) throws IngressoException, SessaoException, FilmeException, UserException {
 		
@@ -78,14 +83,16 @@ public class IngressoService {
 		
 		ingresso.setValorUnitario(sessao.getPrecoIngresso());
 		BigDecimal valorTotal = ingresso.getValorUnitario().multiply(new BigDecimal(ingresso.getQuantidade()));
+		BigDecimal desconto = ((valorTotal.multiply(new BigDecimal(descontoPromocional()))).divide(new BigDecimal(100)));
+		valorTotal = valorTotal.subtract(desconto);
 		ingresso.setValorTotal(valorTotal);
 		
 		eventPublisher.publishEvent(new IngressoEmitidoEvent(ingresso));
 		return ingressoRepository.save(ingresso);
-	
 	}
 	
 	public Ingresso cancelarCompra(Long id) throws IngressoException {
+		
 		Ingresso ingresso = buscar(id);
 		
 		Sessao sessao = ingresso.getSessao();
@@ -104,6 +111,10 @@ public class IngressoService {
 		Ingresso ingresso = ingressoRepository.findById(id).get();
 		validarRetorno(ingresso);
 		return ingresso;
+	}
+	
+	private Integer descontoPromocional() {
+		return promocional.desconto("CINE10");
 	}
 	
 	private void validarRetorno(Ingresso ingresso) throws IngressoException {
