@@ -6,10 +6,13 @@ import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
@@ -17,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cine.monteiro.domain.enums.*;
 import com.cine.monteiro.domain.events.*;
+import com.cine.monteiro.domain.listeners.ConfigSessaoListener;
 import com.cine.monteiro.domain.model.cinema.*;
 import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.repository.IngressoRepository;
@@ -26,6 +30,7 @@ import com.cine.monteiro.utils.Promocional;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class IngressoServiceTest {
 	
 	// Mocks
@@ -35,7 +40,6 @@ public class IngressoServiceTest {
 	@Mock private Promocional promocionalMock;
 	@Mock private IngressoRepository ingressoRepositoryMock;
 	@Mock private ApplicationEventPublisher eventPublisherMock;
-	
 	
 	private IngressoService ingressoService;
 	
@@ -101,9 +105,9 @@ public class IngressoServiceTest {
     	when(promocionalMock.validarCupom("CINE10")).thenReturn(true);
     	when(promocionalMock.desconto(promocionalMock.gerarCupom(cliente))).thenReturn(10);
     	
-    	when(sessaoServiceMock.buscar(1L)).thenReturn(sessao);
-    	when(filmeServiceMock.buscar(1L)).thenReturn(filme);
-    	when(userServiceMock.pesquisar(1L)).thenReturn(cliente);
+    	when(sessaoServiceMock.buscar(anyLong())).thenReturn(sessao);
+    	when(filmeServiceMock.buscar(anyLong())).thenReturn(filme);
+    	when(userServiceMock.pesquisar(anyLong())).thenReturn(cliente);
     	when(ingressoRepositoryMock.save(any(Ingresso.class))).thenReturn(ingresso);
     	
     	Ingresso ingressoComprado = ingressoService.registrarCompra(ingresso);
@@ -121,6 +125,30 @@ public class IngressoServiceTest {
     	 */
     	assertEquals(new BigDecimal("36.00"), ingressoComprado.getValorTotal());
     }
+    
+    @Test
+    public void t4_configSessaoPosCompraIngressoSucess() throws Exception {
+    	
+    	ConfigSessaoListener configSessaoListaner = new ConfigSessaoListener(sessaoServiceMock);
+    	
+    	Ingresso ingressoMock = mock(Ingresso.class);
+    	Sessao sessaoMock = mock(Sessao.class);
+    	IngressoEmitidoEvent eventMock = mock(IngressoEmitidoEvent.class);
+    		
+    	when(eventMock.getIngresso()).thenReturn(ingressoMock);
+    	when(ingressoMock.getSessao()).thenReturn(sessaoMock);
+    	when(ingressoMock.getQuantidade()).thenReturn(10);
+    	when(ingressoMock.getAssentosReservados()).thenReturn(factoryAssentosReservados());
+    	when(sessaoMock.getQuantidadeVagasDisponiveis()).thenReturn(10);
+    	when(sessaoMock.getId()).thenReturn(1L);
+    	when(sessaoServiceMock.buscar(anyLong())).thenReturn(sessaoMock);
+    	
+    	configSessaoListaner.reconfigurarSessaoIngressoComprado(eventMock);
+    	
+    	verify(sessaoMock, times(10)).adicionarAssentoReservado(anyString());
+    	verify(sessaoServiceMock, times(1)).update(any(Sessao.class));
+    }
+    
     
     // Dados
     private User factoryUserCliente() {
@@ -183,6 +211,22 @@ public class IngressoServiceTest {
     	ingresso.adicionarAssento("A2");
 
     	return ingresso;
+    }
+    
+    private Set<String> factoryAssentosReservados() {
+    	Set<String> assentosReservados = new HashSet<String>();
+    	assentosReservados.add("A1");
+    	assentosReservados.add("A2");
+    	assentosReservados.add("A3");
+    	assentosReservados.add("A4");
+    	assentosReservados.add("A5");
+    	assentosReservados.add("B1");
+    	assentosReservados.add("B2");
+    	assentosReservados.add("B3");
+    	assentosReservados.add("B4");
+    	assentosReservados.add("B5");
+    	
+    	return assentosReservados;
     }
 
 }

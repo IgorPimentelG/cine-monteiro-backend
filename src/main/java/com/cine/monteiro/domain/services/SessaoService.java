@@ -127,10 +127,10 @@ public class SessaoService {
 		return sessao;
 	}
 
-	public void update(Sessao sessao) { 
+	public Sessao update(Sessao sessao) { 
 		Sessao sessaoAntiga = sessaoRepository.findById(sessao.getId()).get();
 		BeanUtils.copyProperties(sessao, sessaoAntiga, "id");
-		sessaoRepository.save(sessao);
+		return sessaoRepository.save(sessao);
 	}
 	
 	private Sessao validarDesativacao(Long id) throws SessaoException {

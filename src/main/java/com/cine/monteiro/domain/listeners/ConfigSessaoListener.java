@@ -24,7 +24,7 @@ public class ConfigSessaoListener {
 	}
 	
 	@EventListener
-	public void reconfigurarSessaoIngressoComprado(IngressoEmitidoEvent event) throws SessaoException {
+	public Sessao reconfigurarSessaoIngressoComprado(IngressoEmitidoEvent event) throws SessaoException {
 		
 		Sessao sessao = sessaoService.buscar(event.getIngresso().getSessao().getId());
 		
@@ -36,7 +36,7 @@ public class ConfigSessaoListener {
 			sessao.adicionarAssentoReservado(assento);
 		}
 		
-		sessaoService.update(sessao);
+		return sessaoService.update(sessao);
 	}
 	
 	@EventListener
