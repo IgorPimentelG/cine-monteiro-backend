@@ -31,7 +31,7 @@ import com.cine.monteiro.utils.Promocional;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class IngressoServiceTest {
+public class IngressoServiceMockitoTest {
 	
 	// Mocks
 	@Mock private SessaoService sessaoServiceMock;
@@ -60,7 +60,7 @@ public class IngressoServiceTest {
     	Ingresso ingressoMock = mock(Ingresso.class);
     	Sessao sessaoMock = mock(Sessao.class);
     	
-    	when(sessaoMock.getHoraDeInicioExibicao()).thenReturn(LocalTime.parse("15:00:00"));
+    	when(sessaoMock.getHoraDeInicioExibicao()).thenReturn(LocalTime.parse("23:00:00"));
     	when(ingressoMock.getId()).thenReturn(1L);
     	when(ingressoMock.getSessao()).thenReturn(sessaoMock);   	
     	when(ingressoRepositoryMock.findById(1L)).thenReturn(Optional.of(ingressoMock));

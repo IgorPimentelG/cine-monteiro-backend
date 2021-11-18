@@ -50,6 +50,22 @@ public class UserUtils {
 		}
 		throw new ValidationException("[ERROR VALIDATION] - TELEFONE NÃO CUMPRE OS REQUISITOS NECESSÁRIOS!");
 	}
+	
+	public String gerarNovaSenha() {
+		
+		String password = "CM#";
+		
+		String[] caracteres = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+				"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+		
+		for(int c = 0; c < 8; c++) {
+			int caractereSorteado = (int) (Math.random() * caracteres.length);
+			password += caracteres[caractereSorteado];
+		}
+		
+		return password;
+	}
 
 	public User autenticar(String email, String password) throws UserException {
 		
