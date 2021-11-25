@@ -15,7 +15,6 @@ import com.cine.monteiro.utils.UserUtils;
 @Service
 public class UserService {
 	
-	
 	@Autowired private UserRepository userRepository;
 	@Autowired private UserUtils userUtils;
 	@Autowired private EmailConfig emailConfig;

@@ -1,7 +1,5 @@
 package com.cine.monteiro.domain.model.relatorio;
 
-import java.time.LocalDate;
-
 import javax.persistence.*;
 
 import com.cine.monteiro.domain.model.cinema.Sessao;

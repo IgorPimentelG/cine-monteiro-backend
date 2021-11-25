@@ -13,6 +13,7 @@ import java.util.Set;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
@@ -41,18 +42,8 @@ public class IngressoServiceMockitoTest {
 	@Mock private IngressoRepository ingressoRepositoryMock;
 	@Mock private ApplicationEventPublisher eventPublisherMock;
 	
+	@InjectMocks
 	private IngressoService ingressoService;
-	
-	@Before
-	public void setup() {
-		ingressoService = new IngressoService(
-				ingressoRepositoryMock,
-				sessaoServiceMock, 
-				filmeServiceMock, 
-				userServiceMock, 
-				eventPublisherMock,
-				promocionalMock);
-	}
 	
     @Test
     public void t1_cancelarCompraIngressoSucess() throws Exception {
@@ -63,7 +54,7 @@ public class IngressoServiceMockitoTest {
     	when(sessaoMock.getHoraDeInicioExibicao()).thenReturn(LocalTime.parse("23:00:00"));
     	when(ingressoMock.getId()).thenReturn(1L);
     	when(ingressoMock.getSessao()).thenReturn(sessaoMock);   	
-    	when(ingressoRepositoryMock.findById(1L)).thenReturn(Optional.of(ingressoMock));
+    	when(ingressoRepositoryMock.findById(anyLong())).thenReturn(Optional.of(ingressoMock));
     	
     	Ingresso ingressoCancelado = ingressoService.cancelarCompra(1L);
     	
@@ -80,10 +71,10 @@ public class IngressoServiceMockitoTest {
     	Ingresso ingressoMock = mock(Ingresso.class);
     	Sessao sessaoMock = mock(Sessao.class);
     	
-    	when(sessaoMock.getHoraDeInicioExibicao()).thenReturn(LocalTime.parse("00:30:00"));
+    	when(sessaoMock.getHoraDeInicioExibicao()).thenReturn(LocalTime.parse("15:00:00"));
     	when(ingressoMock.getId()).thenReturn(1L);
     	when(ingressoMock.getSessao()).thenReturn(sessaoMock);   	
-    	when(ingressoRepositoryMock.findById(1L)).thenReturn(Optional.of(ingressoMock));
+    	when(ingressoRepositoryMock.findById(anyLong())).thenReturn(Optional.of(ingressoMock));
     	
     	IngressoException ingressoException = assertThrows(IngressoException.class, () -> ingressoService.cancelarCompra(1L));
     	
@@ -148,7 +139,6 @@ public class IngressoServiceMockitoTest {
     	verify(sessaoMock, times(10)).adicionarAssentoReservado(anyString());
     	verify(sessaoServiceMock, times(1)).update(any(Sessao.class));
     }
-    
     
     // Dados
     private User factoryUserCliente() {
