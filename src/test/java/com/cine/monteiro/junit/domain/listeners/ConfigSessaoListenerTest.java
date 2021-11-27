@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import com.cine.monteiro.domain.enums.*;
 import com.cine.monteiro.domain.events.IngressoEmitidoEvent;
 import com.cine.monteiro.domain.listeners.ConfigSessaoListener;
 import com.cine.monteiro.domain.model.cinema.*;
+import com.cine.monteiro.domain.model.user.Profile;
 import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.repository.*;
 
@@ -93,7 +95,7 @@ class ConfigSessaoListenerTest {
 				"(53) 23957-4553",
 				LocalDate.parse("1990-03-23"),			
 				"cinemonteiro.ads@gmail.com",
-				"1235678", "ROLE_USER");
+				"1235678", new ArrayList<Profile>());
 		cliente = userRepository.save(cliente);
 		assertNotNull(cliente);
 		

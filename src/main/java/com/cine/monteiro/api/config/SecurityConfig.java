@@ -21,25 +21,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-		.authorizeRequests()
+		http.csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/user/cadastrar").permitAll()
-		.anyRequest()
-		.authenticated().and()
-		.httpBasic();
+		.antMatchers(HttpMethod.PUT, "/user/atuailizar").hasAuthority("CLIENT")
+		.antMatchers(HttpMethod.DELETE, "/user/deletar").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.GET, "/user/*").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.POST, "/sala/*").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.DELETE, "/sala/*").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.GET, "/sala/*").hasAnyAuthority("ADMIN", "CLIENT")
+		.antMatchers(HttpMethod.POST, "/filme/*").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.PUT, "/filme/*").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.GET, "/filme/*").hasAnyAuthority("ADMIN", "CLIENT")
+		.antMatchers(HttpMethod.POST, "/ingresso/*").hasAuthority("CLIENT")
+		.antMatchers(HttpMethod.DELETE, "/ingresso/*").hasAuthority("CLIENT")
+		.antMatchers(HttpMethod.GET, "/ingresso/*").hasAnyAuthority("ADMIN", "CLIENT")
+		.antMatchers(HttpMethod.POST, "/sessao/*").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.PUT, "/sessao/*").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.GET, "/sessao/*").hasAnyAuthority("ADMIN", "CLIENT")
+		.anyRequest().authenticated()
+		.and().formLogin();
 	}
 	
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {		
-		auth.inMemoryAuthentication()
-		.withUser("user_admin")
-		.password(new BCryptPasswordEncoder().encode("1234"))
-		.roles("ADMIN")
-		.and()
-		.withUser("user_client")
-		.password(new BCryptPasswordEncoder().encode("1234"))
-		.roles("CLIENT");
-		//auth.userDetailsService(userDatDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDatDetailsService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 
+	
 }

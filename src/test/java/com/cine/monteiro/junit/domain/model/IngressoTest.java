@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cine.monteiro.domain.enums.*;
 import com.cine.monteiro.domain.model.cinema.*;
+import com.cine.monteiro.domain.model.user.Profile;
 import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.repository.*;
 import com.cine.monteiro.domain.services.IngressoService;
@@ -99,7 +101,7 @@ public class IngressoTest {
 				"(11) 99977-2153",
 				LocalDate.parse("2007-05-12"),				// IDADE:14
 				"claudio@hotmail.com",
-				"1235678", "ROLE_USER");
+				"1235678", new ArrayList<Profile>());
 		cliente = userRepository.save(cliente);
 		assertNotNull(cliente);
 
@@ -127,7 +129,7 @@ public class IngressoTest {
 				"(53) 23957-4553",
 				LocalDate.parse("1990-03-23"),			// IDADE: 31
 				"cinemonteiro.ads@gmail.com",
-				"1235678", "ROLE_USER");
+				"1235678", new ArrayList<Profile>());
 		cliente = userRepository.save(cliente);
 		assertNotNull(cliente);
 		

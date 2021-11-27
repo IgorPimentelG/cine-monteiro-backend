@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -23,6 +24,7 @@ import com.cine.monteiro.domain.enums.*;
 import com.cine.monteiro.domain.events.*;
 import com.cine.monteiro.domain.listeners.ConfigSessaoListener;
 import com.cine.monteiro.domain.model.cinema.*;
+import com.cine.monteiro.domain.model.user.Profile;
 import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.repository.IngressoRepository;
 import com.cine.monteiro.domain.services.*;
@@ -148,8 +150,7 @@ public class IngressoServiceMockitoTest {
 				"(11) 99977-2153",
 				LocalDate.parse("1990-05-12"),
 				"claudio@cinemonteiro.com",
-				"1235678", 
-				"CLIENT");
+				"1235678", new ArrayList<Profile>());
     	
     	cliente.setId(1L);
     	return cliente;

@@ -2,7 +2,6 @@ package com.cine.monteiro.api.controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.cine.monteiro.domain.model.user.User;
@@ -23,7 +22,6 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/deletar/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<User> deletar(@PathVariable Long id) throws UserException {
 		User userDeletado = userService.deletar(id);
 		return ResponseEntity.ok(userDeletado);
@@ -36,7 +34,6 @@ public class UserController {
 	}
 	
 	@GetMapping("/listar")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<User>> listar() throws UserException {
 		List<User> users = userService.listar();
 		return ResponseEntity.ok(users);

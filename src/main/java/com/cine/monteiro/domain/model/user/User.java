@@ -1,15 +1,13 @@
 package com.cine.monteiro.domain.model.user;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.br.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
@@ -46,20 +44,21 @@ public class User implements UserDetails {
 	
 	@NotBlank
 	private String password;
-
-	private String authorities;							// USER, ADMIN
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	private List<Profile> profiles;
+
 	// Construtores
 	public User() { }
 
-	public User(String CPF, String nome, String telefone, LocalDate dataNascimento, String email, String password, String authorities) {
+	public User(String CPF, String nome, String telefone, LocalDate dataNascimento, String email, String password, List<Profile> profiles) {
 		this.CPF = CPF;
 		this.nome = nome;
 		this.email = email;
 		this.password = password;
 		this.telefone = telefone;
 		this.dataNascimento = dataNascimento;
-		this.authorities = authorities;
+		this.profiles = profiles;
 	}
 	
 	public String toString() {
@@ -73,9 +72,7 @@ public class User implements UserDetails {
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Arrays.stream(this.authorities.split(","))
-				.map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
+		return profiles;
 	}
 	
 	@Override
