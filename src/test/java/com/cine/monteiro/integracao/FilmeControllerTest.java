@@ -25,11 +25,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @RunWith(SpringRunner.class)
 public class FilmeControllerTest {
 
-	@Autowired
 	private MockMvc mockMvc;
 
 	@Autowired
 	private ObjectMapper mapper;
+	
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 
