@@ -20,7 +20,7 @@ public class SalaController {
 	private SalaService salaService;
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Sala> cadastrar(@RequestBody @Valid Sala sala) throws SalaException {
+	public ResponseEntity<Sala> cadastrar(@Valid @RequestBody Sala sala) throws SalaException {
 		salaService.salvar(sala);
 		return ResponseEntity.ok(sala);
 	}

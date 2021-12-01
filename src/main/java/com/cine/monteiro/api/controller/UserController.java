@@ -1,5 +1,9 @@
 package com.cine.monteiro.api.controller;
 import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +20,7 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<User> cadastrar(@RequestBody User user) throws UserException {
+	public ResponseEntity<User> cadastrar(@Valid @RequestBody User user) throws UserException {
 		userService.salvar(user);
 		return ResponseEntity.ok(user);
 	}

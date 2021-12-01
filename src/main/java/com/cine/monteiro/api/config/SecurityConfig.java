@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests()
+		http.httpBasic().and().csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/user/cadastrar").permitAll()
 		.antMatchers(HttpMethod.PUT, "/user/atuailizar").hasAuthority("CLIENT")
 		.antMatchers(HttpMethod.DELETE, "/user/deletar").hasAuthority("ADMIN")
@@ -38,8 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.POST, "/sessao/*").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.PUT, "/sessao/*").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.GET, "/sessao/*").hasAnyAuthority("ADMIN", "CLIENT")
-		.anyRequest().authenticated()
-		.and().formLogin();
+		.anyRequest().authenticated();
 	}
 	
 	@Override

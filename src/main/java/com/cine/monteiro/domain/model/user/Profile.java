@@ -18,6 +18,8 @@ public class Profile implements GrantedAuthority {
 	private Integer id;
 	
 	private String profile;
+	
+	public Profile() {}
 
 	@Override
 	public String getAuthority() {
