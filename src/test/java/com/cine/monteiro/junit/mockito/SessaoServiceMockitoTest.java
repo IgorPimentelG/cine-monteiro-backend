@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
@@ -39,13 +38,13 @@ import com.cine.monteiro.exception.SessaoException;
 @SuppressWarnings("unchecked")
 public class SessaoServiceMockitoTest {
 	
-	@Mock //@Mock simula ou cria uma cópia da estrutura da classe SessaoRepository.
+	@Mock 
 	private SessaoRepository sessaoRepository;
 
 	@Mock
 	private SalaRepository salaRepository;
 	
-	@InjectMocks //cria uma instância e injeta os objetos @Mock.
+	@InjectMocks 
 	private SessaoService sessaoService;
 	
 	private SalaService salaService = mock(SalaService.class);
@@ -63,7 +62,6 @@ public class SessaoServiceMockitoTest {
 		filme.setId(1L);
 		filme.setDuracao(40L);
 		
-		//quando...
 		when(salaService.pesquisar(eq(1L))).thenReturn(sala);
 		when(filmeService.buscar(eq(1L))).thenReturn(filme);
 		
