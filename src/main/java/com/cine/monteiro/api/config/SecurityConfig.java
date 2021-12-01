@@ -23,6 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.httpBasic().and().csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/user/cadastrar").permitAll()
+		.antMatchers(HttpMethod.PUT, "/user/recuperar-conta").permitAll()
 		.antMatchers(HttpMethod.PUT, "/user/atuailizar").hasAuthority("CLIENT")
 		.antMatchers(HttpMethod.DELETE, "/user/deletar").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.GET, "/user/*").hasAuthority("ADMIN")

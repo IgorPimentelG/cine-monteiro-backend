@@ -67,60 +67,19 @@ public class SecutiryConfigTest {
 	// Rotas Aberta
 	@Test
 	@WithAnonymousUser
-	public void t1_cadastrarSucess() throws Exception {
+	public void t1_recuperarEmailSucess() throws Exception {
 		
-		User user = new User();
-		user.setCPF("475.063.007-10");
-		user.setNome("Yago Calebe Ramos");
-		user.setTelefone("(34) 99971-9957");
-		user.setDataNascimento(LocalDate.parse("2002-12-23"));
-		user.setEmail("yagocaleberamos_@agenciadbd.com");
-		user.setPassword("CEck#GD3HFm874");
-		
-		String bodyRequest = mapper.writeValueAsString(user);
-		
-		MvcResult response = mockMvc.perform(
-				post("/user/cadastrar").content(bodyRequest)
-				.contentType(MediaType.APPLICATION_JSON)
-		).andExpect(status().isOk()).andReturn();
-		
-		assertEquals(200, response.getResponse().getStatus());
-		verify(userRepositoryMock, times(1)).save(any(User.class));
 	}
 	
 	@Test
 	@WithAnonymousUser
-	public void t2_cadastrarError() throws Exception {
+	public void t2_recuperarEmailError() throws Exception {
 
-		User user = new User();
-		user.setCPF("475.063");
-		user.setNome("Yago Calebe Ramos");
-		user.setTelefone("(9971-9957");
-		user.setDataNascimento(LocalDate.parse("2002-12-23"));
-		user.setEmail("yagocaleberamos_@agenciadbd.com");
-		user.setPassword("123456");
 		
-		String bodyRequest = mapper.writeValueAsString(user);
-		
-		MvcResult response = mockMvc.perform(
-				post("/user/cadastrar").content(bodyRequest)
-				.contentType(MediaType.APPLICATION_JSON)
-		).andExpect(status().isBadRequest()).andReturn();
-		
-		assertEquals(400, response.getResponse().getStatus());
-		verify(userRepositoryMock, never()).save(any(User.class));
 	}
 
 	// Rotas Admin
-	@Test
-	@WithMockUser(username="user_admin", authorities = {"ADMIN"})
-	public void t3_deletarSalaSucess() throws Exception {
-	
-	}
-	
-	public void t4_cadastrarSalaSucess() {
-		
-	}
+
 	
 	
 	
