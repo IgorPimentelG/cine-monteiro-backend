@@ -1,5 +1,7 @@
 package com.cine.monteiro.api.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -25,9 +27,13 @@ public class FilmeController {
 	private GeneroService generoService;
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Filme> cadastrar(@RequestBody @Valid Filme filme) throws FilmeException {
-		filmeService.salvar(filme);
-		return ResponseEntity.ok(filme);
+	public ResponseEntity<Filme> cadastrar(@RequestBody @Valid Filme filme) throws URISyntaxException{
+		try {
+			filmeService.salvar(filme);
+			return ResponseEntity.created(new URI("http://localhost:8080/filme/cadastrar")).build();
+		} catch (FilmeException e) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 	
 	@PostMapping("/cadastrar/genero")
