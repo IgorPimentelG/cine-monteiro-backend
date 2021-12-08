@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.cine.monteiro.domain.services.ImplementsUserDetailsService;
 
@@ -21,25 +22,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic().and().csrf().disable().authorizeRequests()
+		http.csrf().disable().authorizeRequests()
+		.antMatchers(HttpMethod.POST, "/login").permitAll()
 		.antMatchers(HttpMethod.POST, "/user/cadastrar").permitAll()
 		.antMatchers(HttpMethod.PUT, "/user/recuperar-conta").permitAll()
 		.antMatchers(HttpMethod.PUT, "/user/atuailizar").hasAuthority("CLIENT")
 		.antMatchers(HttpMethod.DELETE, "/user/deletar").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.GET, "/user/*").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.POST, "/sala/*").hasAuthority("ADMIN")
-		.antMatchers(HttpMethod.DELETE, "/sala/*").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.DELETE, "/sala/deletar/*").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.GET, "/sala/*").hasAnyAuthority("ADMIN", "CLIENT")
 		.antMatchers(HttpMethod.POST, "/filme/*").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.PUT, "/filme/*").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.GET, "/filme/*").hasAnyAuthority("ADMIN", "CLIENT")
 		.antMatchers(HttpMethod.POST, "/ingresso/*").hasAuthority("CLIENT")
-		.antMatchers(HttpMethod.DELETE, "/ingresso/*").hasAuthority("CLIENT")
+		.antMatchers(HttpMethod.DELETE, "/ingresso/cancelar/*").hasAuthority("CLIENT")
 		.antMatchers(HttpMethod.GET, "/ingresso/*").hasAnyAuthority("ADMIN", "CLIENT")
 		.antMatchers(HttpMethod.POST, "/sessao/*").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.PUT, "/sessao/*").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.GET, "/sessao/*").hasAnyAuthority("ADMIN", "CLIENT")
-		.anyRequest().authenticated();
+		.anyRequest().authenticated()
+		.and()
+		.addFilterBefore(new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+		.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Override

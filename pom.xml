@@ -81,9 +81,15 @@
 		    <artifactId>hibernate-validator</artifactId>
 		    <version>6.0.12.Final</version>
 		</dependency>
-		<dependency>     
-			<groupId>com.google.code.gson</groupId>     
-			<artifactId>gson</artifactId>     
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20210307</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
 		</dependency>
 	</dependencies>
 

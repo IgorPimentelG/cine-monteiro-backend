@@ -86,6 +86,7 @@ public class SessaoService {
 	}
 	
 	public List<Sessao> listarDiaAtual() throws SessaoException {
+		
 		List<Sessao> sessoes = sessaoRepository.buscarSessoesDoDia(LocalTime.now());
 		
 		if(sessoes.isEmpty()) {

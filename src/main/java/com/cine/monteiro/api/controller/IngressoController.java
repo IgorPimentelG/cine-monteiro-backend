@@ -29,9 +29,15 @@ public class IngressoController {
 	}
 	
 	@DeleteMapping("/cancelar/{id}")
-	public ResponseEntity<Ingresso> cancelar(@PathVariable Long id) throws IngressoException, SessaoException {
-		Ingresso ingresso = ingressoService.cancelarCompra(id);
-		return ResponseEntity.ok(ingresso);
+	public ResponseEntity<Ingresso> cancelar(@PathVariable Long id) {
+		
+		try {
+			Ingresso ingresso = ingressoService.cancelarCompra(id);
+			return ResponseEntity.accepted().body(ingresso);
+		} catch (IngressoException e) {
+			return ResponseEntity.badRequest().build();
+		}
+		
 	}
 	
 	@GetMapping("/pesquisar/{id}")

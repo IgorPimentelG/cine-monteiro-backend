@@ -94,12 +94,12 @@ public class IngressoService {
 	public Ingresso cancelarCompra(Long id) throws IngressoException {
 		
 		Ingresso ingresso = buscar(id);
-		
+				
 		Sessao sessao = ingresso.getSessao();
 		
 		if(LocalTime.now().isBefore(sessao.getHoraDeInicioExibicao())) {
 			ingressoRepository.delete(ingresso);
-			eventPublisher.publishEvent(new IngressoCanceladoEvent(ingresso));
+			//eventPublisher.publishEvent(new IngressoCanceladoEvent(ingresso));
 			return ingresso;
 		}
 		

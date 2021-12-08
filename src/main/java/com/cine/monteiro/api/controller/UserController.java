@@ -3,6 +3,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.services.UserService;
 import com.cine.monteiro.exception.UserException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 	
-	@Autowired
-	private UserService userService;
+	@Autowired private UserService userService;
 	
 	@PostMapping("/cadastrar")
 	public ResponseEntity<User> cadastrar(@Valid @RequestBody User user) throws UserException {
@@ -27,11 +28,15 @@ public class UserController {
 	
 	@PutMapping("/recuperar-conta")
 	public ResponseEntity<String> recuperar(@RequestBody String email) {
+		
+		JSONObject json = new JSONObject(email);
+		email = json.getString("email");
+		
 		try {
 			userService.recuperarPassword(email);
-			return new ResponseEntity<String>("Nova Senha Enviada!", HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("E-mail Enviado com Sucesso!", HttpStatus.ACCEPTED);
 		} catch (UserException error) {
-			return new ResponseEntity<String>("Recuperação Falhou!", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>("Usuário Não Encontrado!", HttpStatus.NOT_FOUND);
 		}
 	}
 	
