@@ -7,11 +7,8 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.br.*;
-import org.springframework.beans.factory.annotation.CustomAutowireConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import lombok.Data;
 

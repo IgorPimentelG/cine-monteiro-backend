@@ -1,5 +1,6 @@
 package com.cine.monteiro.api.config;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,7 +21,7 @@ public class TokenAuthenticationService {
 	protected static final String TOKEN_PREFIX = "token-cine-monteiro";
 	protected static final String HEADER_STRING = "Authorization";
 	
-	public static void addAuthentication(HttpServletResponse response, String username) {
+	public static void addAuthentication(HttpServletResponse response, String username, Collection<? extends GrantedAuthority> authorities) {
 		
 		String JWT = Jwts.builder()
 				.setSubject(username)
@@ -28,6 +30,7 @@ public class TokenAuthenticationService {
 				.compact();
 		
 		response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+		response.addHeader("Authorities", authorities.toString());
 	}
 	
 	public static Authentication getAuthentication(HttpServletRequest request) {
