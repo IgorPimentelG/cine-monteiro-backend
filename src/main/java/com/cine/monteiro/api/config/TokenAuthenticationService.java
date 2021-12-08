@@ -14,10 +14,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 public class TokenAuthenticationService {
 	
-	public static final long EXPIRATION_TIME = 860_00_000;
-	public static final String SECRET = "cine-monteiro";
-	public static final String TOKEN_PREFIX = " cine-monteiro";
-	public static final String HEADER_STRING = "Authorization";
+	protected static final long EXPIRATION_TIME = 5 * 60 * 60;
+	protected static final String SECRET = "cine-monteiro";
+	protected static final String TOKEN_PREFIX = "token-cine-monteiro";
+	protected static final String HEADER_STRING = "Authorization";
 	
 	public static void addAuthentication(HttpServletResponse response, String username) {
 		
