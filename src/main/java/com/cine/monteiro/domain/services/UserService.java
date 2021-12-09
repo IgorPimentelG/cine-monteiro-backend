@@ -83,10 +83,11 @@ public class UserService {
 		
 	}
 	
-	public User autenticar(String email, String password) throws UserException {
-		return userUtils.autenticar(email, password);
+	public String perfilUser(String email) throws UserException {
+		User user = userRepository.findByEmail(email);
+		return user.getProfiles().get(0).getProfile();
 	}
-
+	
 	private void validarRetorno(User user) throws UserException {
 		if(user == null) {
 			throw new UserException("USUÁRIO NÃO EXISTE!");

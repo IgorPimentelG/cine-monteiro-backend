@@ -7,28 +7,53 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import com.cine.monteiro.domain.DTO.DTOUserAuth;
+import com.cine.monteiro.domain.model.user.AccountCredentials;
 import com.cine.monteiro.domain.model.user.User;
 import com.cine.monteiro.domain.services.UserService;
 import com.cine.monteiro.exception.UserException;
+import com.cine.monteiro.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 	
+	@Autowired private JwtUtil jwtUtil;
+	@Autowired private ObjectMapper mapper;
 	@Autowired private UserService userService;
+	@Autowired private AuthenticationManager authenticationManager;
+	
+	@PostMapping("/autenticar")
+	public String autenticar(@RequestBody AccountCredentials accountCredentials) throws Exception {
+		
+		try {
+			authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(accountCredentials.getUsername(), accountCredentials.getPassword()));
+		} catch(Exception error) {
+			throw new UserException("Usuário Inválido.");
+		}
+		
+		String profile = userService.perfilUser(accountCredentials.getUsername());
+		String token = jwtUtil.generateToken(accountCredentials.getUsername());
+		
+		return mapper.writeValueAsString(new DTOUserAuth(token, profile));
+		
+	}
 	
 	@PostMapping("/cadastrar")
 	public ResponseEntity<User> cadastrar(@Valid @RequestBody User user) throws UserException {
 		userService.salvar(user);
 		return ResponseEntity.ok(user);
 	}
-	
+
 	@PutMapping("/recuperar-conta")
 	public ResponseEntity<String> recuperar(@RequestBody String email) {
-		
+				
 		JSONObject json = new JSONObject(email);
 		email = json.getString("email");
 		
@@ -64,9 +89,4 @@ public class UserController {
 		return ResponseEntity.ok(userPesquisado);
 	}
 	
-	@GetMapping("/autenticar")
-	public ResponseEntity<User> validarSenha(@RequestParam String email, @RequestParam String password) throws UserException {
-		User user = userService.autenticar(email, password);
-		return ResponseEntity.ok(user);
-	}
 }
