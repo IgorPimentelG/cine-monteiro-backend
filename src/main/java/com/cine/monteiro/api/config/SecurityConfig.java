@@ -13,8 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.cine.monteiro.api.filter.JwtFilter;
 import com.cine.monteiro.domain.services.ImplementsUserDetailsService;
@@ -29,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().configurationSource(requset -> new CorsConfiguration().applyPermitDefaultValues())
+		http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
 		.and().csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/user/**").permitAll()
 		.antMatchers(HttpMethod.PUT, "/user/recuperar-conta").permitAll()
@@ -59,6 +62,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDatDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+	}
+	
+	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder;
 	}
 	
 	@Bean(name = BeanIds.AUTHENTICATION_MANAGER)

@@ -1,12 +1,16 @@
 package com.cine.monteiro.domain.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.cine.monteiro.domain.model.user.Profile;
 import com.cine.monteiro.domain.model.user.User;
+import com.cine.monteiro.domain.repository.ProfileRepository;
 import com.cine.monteiro.domain.repository.UserRepository;
 import com.cine.monteiro.exception.UserException;
 import com.cine.monteiro.mail.EmailConfig;
@@ -16,6 +20,7 @@ import com.cine.monteiro.utils.UserUtils;
 public class UserService {
 	
 	@Autowired private UserRepository userRepository;
+	@Autowired private ProfileRepository profileRepository;
 	@Autowired private UserUtils userUtils;
 	@Autowired private EmailConfig emailConfig;
 	
@@ -28,8 +33,25 @@ public class UserService {
 			throw new UserException("E-MAIL JÁ CADASTRADO!");
 		}
 		
-		user.setPassword(userUtils.encodePassword(user.getPassword()));				// Encriptar Senha
+		Profile profile = new Profile();
 		
+		if(userRepository.findAll().size() == 0) {
+			profile.setProfile("ADMIN");
+		} else {
+			profile.setProfile("CLIENT");
+		}
+		
+		if(profileRepository.findByProfile(profile.getProfile()) != null) {
+			profile = profileRepository.findByProfile(profile.getProfile());
+		} else {
+			profileRepository.save(profile);
+		}
+		
+		List<Profile> profiles = new ArrayList<Profile>();
+		profiles.add(profile);
+		user.setProfiles(profiles);
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+			
 		return userRepository.save(user);
 	}
 	

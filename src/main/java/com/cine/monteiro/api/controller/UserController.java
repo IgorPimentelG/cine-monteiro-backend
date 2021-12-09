@@ -39,7 +39,7 @@ public class UserController {
 		}
 		
 		String profile = userService.perfilUser(accountCredentials.getUsername());
-		String token = jwtUtil.generateToken(accountCredentials.getUsername());
+		String token = jwtUtil.gerarToken(accountCredentials.getUsername());
 		
 		return mapper.writeValueAsString(new DTOUserAuth(token, profile));
 		
