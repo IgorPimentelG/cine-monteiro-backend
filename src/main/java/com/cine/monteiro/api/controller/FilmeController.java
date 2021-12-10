@@ -18,6 +18,7 @@ import com.cine.monteiro.exception.FilmeException;
 
 @RestController
 @RequestMapping("/filme")
+@CrossOrigin(origins = "http://localhost:4200")
 public class FilmeController {
 	
 	@Autowired

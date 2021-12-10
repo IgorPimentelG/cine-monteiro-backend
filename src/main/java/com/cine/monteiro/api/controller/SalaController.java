@@ -16,6 +16,7 @@ import com.cine.monteiro.exception.SalaException;
 
 @RestController
 @RequestMapping("/sala")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SalaController {
 	
 	@Autowired

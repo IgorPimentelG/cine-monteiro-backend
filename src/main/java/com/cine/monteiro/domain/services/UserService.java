@@ -97,7 +97,7 @@ public class UserService {
 		boolean emailEnviado = emailConfig.enviarEmail(user.getEmail(), "CINE MONTEIRO - RECUPERAÇÃO DE CONTA", mensagem);
 		
 		if(emailEnviado) {
-			user.setPassword(passwordGerada);
+			user.setPassword(new BCryptPasswordEncoder().encode(passwordGerada));
 			userRepository.save(user);
 		} else {
 			throw new UserException("NÃO FOI POSSÍVEL RECUPERAR SUA CONTA. TENTE NOVAMENTE MAIS TARDE!");

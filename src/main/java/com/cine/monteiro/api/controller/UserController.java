@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 	
 	@Autowired private JwtUtil jwtUtil;
@@ -51,7 +52,7 @@ public class UserController {
 		return ResponseEntity.ok(user);
 	}
 
-	@PutMapping("/recuperar-conta")
+	@PutMapping("/recuperar")
 	public ResponseEntity<String> recuperar(@RequestBody String email) {
 				
 		JSONObject json = new JSONObject(email);

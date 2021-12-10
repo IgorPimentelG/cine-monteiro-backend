@@ -15,13 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import com.cine.monteiro.api.filter.JwtFilter;
 import com.cine.monteiro.domain.services.ImplementsUserDetailsService;
-
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -32,10 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+		http.cors()
 		.and().csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/user/**").permitAll()
-		.antMatchers(HttpMethod.PUT, "/user/recuperar-conta").permitAll()
+		.antMatchers(HttpMethod.PUT, "/user/recuperar").permitAll()
 		.antMatchers(HttpMethod.PUT, "/user/atuailizar").hasAuthority("CLIENT")
 		.antMatchers(HttpMethod.DELETE, "/user/deletar").hasAuthority("ADMIN")
 		.antMatchers(HttpMethod.GET, "/user/**").hasAuthority("ADMIN")

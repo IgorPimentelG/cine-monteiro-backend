@@ -16,6 +16,7 @@ import com.cine.monteiro.exception.UserException;
 
 @RestController
 @RequestMapping("/ingresso")
+@CrossOrigin(origins = "http://localhost:4200")
 public class IngressoController {
 	
 	@Autowired
