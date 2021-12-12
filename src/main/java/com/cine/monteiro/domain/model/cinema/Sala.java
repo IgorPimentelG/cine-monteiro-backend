@@ -6,12 +6,17 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "TB_SALA")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id",
+		scope = Long.class)
 public class Sala {
 
 	@Id

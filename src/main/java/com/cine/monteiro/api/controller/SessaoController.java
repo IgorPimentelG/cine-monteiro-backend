@@ -19,9 +19,9 @@ public class SessaoController {
 	
 	@Autowired
 	private SessaoService sessaoService;
-	
+
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Sessao> cadastrar(@RequestBody @Valid Sessao sessao) throws SessaoException, SalaException, FilmeException {
+	public ResponseEntity<Sessao> cadastrar(@Valid @RequestBody Sessao sessao) throws SessaoException, SalaException, FilmeException { 
 		sessaoService.cadastrar(sessao);
 		return ResponseEntity.ok(sessao);
 	}
@@ -33,7 +33,7 @@ public class SessaoController {
 	}
 	
 	@PutMapping("/desativar/{id}")
-	public ResponseEntity<Sessao> desativar(@PathVariable Long id) throws SessaoException {
+	public ResponseEntity<Sessao> desativar(@PathVariable("id") Long id) throws SessaoException {
 		Sessao sessao = sessaoService.desativar(id);
 		return ResponseEntity.ok(sessao);
 	}

@@ -21,6 +21,9 @@ public class Filme {
 	
 	private String sinopse;
 	
+	@Lob
+	private String capa;
+	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Genero genero;
 	

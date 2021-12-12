@@ -5,7 +5,6 @@ import javax.validation.Valid;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,17 +52,10 @@ public class UserController {
 	}
 
 	@PutMapping("/recuperar")
-	public ResponseEntity<String> recuperar(@RequestBody String email) {
-				
+	public void recuperar(@RequestBody String email) throws UserException {
 		JSONObject json = new JSONObject(email);
 		email = json.getString("email");
-		
-		try {
-			userService.recuperarPassword(email);
-			return new ResponseEntity<String>("E-mail Enviado com Sucesso!", HttpStatus.ACCEPTED);
-		} catch (UserException error) {
-			return new ResponseEntity<String>("Usuário Não Encontrado!", HttpStatus.NOT_FOUND);
-		}
+		userService.recuperarPassword(email);
 	}
 	
 	@DeleteMapping("/deletar/{id}")

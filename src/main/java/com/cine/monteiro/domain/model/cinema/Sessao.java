@@ -10,11 +10,15 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.*;
 
 @Data
 @Entity
 @Table(name = "TB_SESSAO")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Long.class)
 public class Sessao {
 	
 	@Id
@@ -38,7 +42,6 @@ public class Sessao {
 	@Column(name = "hora_termino_exibicao", columnDefinition = "TIME")
 	private LocalTime horaDeTerminoExibicao;
 	
-	@Future
 	@Column(name = "inicio_periodo_exibicao", columnDefinition = "DATE")
 	private LocalDate inicioPeriodoExibicao;
 	

@@ -1,7 +1,9 @@
 package com.cine.monteiro.api.controller;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Base64;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -9,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cine.monteiro.domain.model.cinema.Filme;
 import com.cine.monteiro.domain.model.cinema.Genero;
@@ -28,9 +31,12 @@ public class FilmeController {
 	private GeneroService generoService;
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Filme> cadastrar(@RequestBody @Valid Filme filme) throws URISyntaxException{
+	public ResponseEntity<Filme> cadastrar(@RequestBody @Valid Filme filme) throws URISyntaxException {
+		
 		try {
+
 			filmeService.salvar(filme);
+			
 			return ResponseEntity.created(new URI("http://localhost:8080/filme/cadastrar")).build();
 		} catch (FilmeException e) {
 			return ResponseEntity.badRequest().build();
@@ -40,6 +46,11 @@ public class FilmeController {
 	@PostMapping("/cadastrar/genero")
 	public Genero cadastrarGenero(@RequestBody @Valid Genero genero) {
 		return generoService.salvar(genero);
+	}
+	
+	@GetMapping("/genero/listar")
+	public List<Genero> listarGeneros() {
+		return generoService.listar();
 	}
 	
 	@PutMapping("/atualizar")
