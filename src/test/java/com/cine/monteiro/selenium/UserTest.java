@@ -1,5 +1,7 @@
 package com.cine.monteiro.selenium;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.After;
@@ -95,7 +97,7 @@ public class UserTest {
 		
 		assertEquals("Não foi possível concluír o cadastro.", toast.getText());
 		assertEquals(inputCPF.getText(), "");
-		assertEquals(true, inputNome.getAttribute("class").contains("ng-invalid"));
+		assertTrue(inputNome.getAttribute("class").contains("ng-invalid"));
 		
 	}
 	
@@ -166,8 +168,8 @@ public class UserTest {
 		inputEmail.sendKeys("henriqueseverinoyuripereira_@otlokk.com");
 		inputPassword.sendKeys("1234");
 		
-		assertEquals(true, inputEmail.getAttribute("class").contains("ng-valid"));
-		assertEquals(true, inputPassword.getAttribute("class").contains("ng-valid"));
+		assertTrue(inputEmail.getAttribute("class").contains("ng-valid"));
+		assertTrue(inputPassword.getAttribute("class").contains("ng-valid"));
 		
 		btnEntrar.click();
 		
@@ -177,8 +179,8 @@ public class UserTest {
 		
 		assertEquals("Usuário Não Encontrado.", toast.getText());
 		assertEquals("http://localhost:4200/", driver.getCurrentUrl());
-		assertEquals(true, inputEmail.getAttribute("class").contains("ng-invalid"));
-		assertEquals(true, inputPassword.getAttribute("class").contains("ng-invalid"));
+		assertTrue(inputEmail.getAttribute("class").contains("ng-invalid"));
+		assertTrue(inputPassword.getAttribute("class").contains("ng-invalid"));
 	
 	}
 	
@@ -189,12 +191,12 @@ public class UserTest {
 		WebElement inputEmail = driver.findElement(By.id("input-email"));
 		WebElement inputPassword = driver.findElement(By.id("input-password"));
 		
-		assertEquals(false, btnEntrar.isEnabled());
+		assertFalse(btnEntrar.isEnabled());
 		
 		inputEmail.sendKeys("igor.pimentel.msi@hotmail.com");
 		inputPassword.sendKeys("65jd8RFEel#");
 		
-		assertEquals(true, btnEntrar.isEnabled());
+		assertFalse(btnEntrar.isEnabled());
 		
 		btnEntrar.click();
 		
@@ -220,8 +222,7 @@ public class UserTest {
 	public void t5_recoverError() throws InterruptedException {
 	
 		// Screen SignIn
-		WebElement btnRecover = driver.findElement(By.className("btn-link-recover"));
-		btnRecover.click();
+		driver.findElement(By.className("btn-link-recover")).click();;
 		
 		assertEquals("http://localhost:4200/recover", driver.getCurrentUrl());
 
@@ -231,7 +232,7 @@ public class UserTest {
 		
 		inputEmail.sendKeys("belijag308@gruppies.com");		
 		
-		assertEquals(true, inputEmail.getAttribute("class").contains("ng-valid"));
+		assertTrue(inputEmail.getAttribute("class").contains("ng-valid"));
 		
 		Thread.sleep(1000);
 		
@@ -242,7 +243,7 @@ public class UserTest {
 		WebElement toast = driver.findElement(By.className("p-toast-detail"));
 		
 		assertEquals("Usuário Não Encontrado.", toast.getText());
-		assertEquals(true, inputEmail.getAttribute("class").contains("ng-invalid"));
+		assertTrue(inputEmail.getAttribute("class").contains("ng-invalid"));
 		assertEquals("http://localhost:4200/recover", driver.getCurrentUrl());
 
 	}
@@ -251,23 +252,21 @@ public class UserTest {
 	public void t6_recoverSuccess() throws InterruptedException {
 		
 		// Screen SignIn
-		WebElement btnRecover = driver.findElement(By.className("btn-link-recover"));
-		btnRecover.click();
+		driver.findElement(By.className("btn-link-recover")).click();
 		
 		assertEquals("http://localhost:4200/recover", driver.getCurrentUrl());
 
 		// Screen Recover
 		WebElement btnEnviar = driver.findElement(By.id("btn-enviar"));
 		
-		assertEquals(false, btnEnviar.isEnabled());
+		assertFalse(btnEnviar.isEnabled());
 		
 		WebElement inputEmail = driver.findElement(By.id("input-email"));
-		
 		inputEmail.sendKeys("igor.pimentel.msi@hotmail.com");		
 		
 		Thread.sleep(1000);
 		
-		assertEquals(true, btnEnviar.isEnabled());
+		assertTrue(btnEnviar.isEnabled());
 		
 		btnEnviar.click();
 		
@@ -277,7 +276,7 @@ public class UserTest {
 		
 		assertEquals("Verifique seu e-mail.", toast.getText());
 		assertEquals("http://localhost:4200/", driver.getCurrentUrl());
-		
+			
 	}
 
 }
